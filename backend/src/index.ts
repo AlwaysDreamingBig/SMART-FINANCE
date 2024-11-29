@@ -4,6 +4,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from './config/app.config';
 import { connectDatabase } from './database/connectors/mongodbDatabase';
+import { errorHandler, throwAppError, throwHttpError } from './middleware/errorHandler';
+import { HTTPSTATUS } from './config/http.config';
+import { AppErrorMessage } from './common/enums/app-error.enum';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -22,16 +25,35 @@ app.use(cors({
 app.use(cookieParser()); // Parse cookies
 
 // Example route for testing
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({
-    message: 'Hello, MERN with TypeScript!',
-  });
+app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Example of an async operation, e.g., fetching data from the database
+    const data = { message: 'Hello, MERN with TypeScript!' };
+    res.status(HTTPSTATUS.OK).json(data);
+  } catch (err) {
+    // If any async error occurs, forward it to the error handler
+    next(err);
+  }
 });
 
-// Error-handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.message);
-  res.status(500).json({ error: err.message });
+// Route to demonstrate throwing custom errors
+app.get('/error-demo', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Throwing a custom error
+    throwHttpError('This is an http error', HTTPSTATUS.BAD_REQUEST);
+  } catch (err) {
+    next(err); // Forward the error to the error handler
+  }
+});
+
+// Route to demonstrate throwing app errors
+app.get('/app-error-demo', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Throwing a custom error
+    throwAppError(AppErrorMessage.ACCESS_FORBIDDEN, HTTPSTATUS.FORBIDDEN);
+  } catch (err) {
+    next(err); // Forward the error to the error handler
+  }
 });
 
 
@@ -44,3 +66,6 @@ app.listen(PORT, async () => {
       console.error('Failed to start the server:', error);
   }
 });
+
+// Use the custom error handler middleware (must be after all route handlers)
+app.use(errorHandler);
