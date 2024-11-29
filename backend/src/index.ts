@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from './config/app.config';
+import { connectDatabase } from './database/connectors/mongodbDatabase';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -36,5 +37,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 // Start the server
 app.listen(PORT, async () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  try {
+      await connectDatabase(); // Establish MongoDB connection
+      console.log(`Server is running on http://localhost:${PORT}`);
+  } catch (error) {
+      console.error('Failed to start the server:', error);
+  }
 });

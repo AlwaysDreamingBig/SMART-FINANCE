@@ -11,6 +11,8 @@ interface AppConfig {
       REFRESH_SECRET: string;
       REFRESH_EXPIRES_IN: string;
     };
+    MONGO_URI: string;
+    MONGO_DB_NAME: string;
   }
 
 const appConfig = (): AppConfig => ({
@@ -24,6 +26,8 @@ const appConfig = (): AppConfig => ({
         REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET"),
         REFRESH_EXPIRES_IN: getEnv("JWT_REFRESH_EXPIRES_IN", "30d"),
     },
+    MONGO_URI: getEnv("MONGO_URI"),
+    MONGO_DB_NAME: getEnv("MONGO_DB_NAME", "smart_finance"),
 });
 
 
