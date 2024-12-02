@@ -5,10 +5,14 @@ import { throwHttpError } from "../../middleware/errorHandler";
 import { ManagerModel } from "../../database/models/manager/manager.user.model";
 import { DeveloperModel } from "../../database/models/developer/developer.user.model";
 import { ClientModel } from "../../database/models/client/client.user.model";
+import { registerSchema, validateSchema } from "../../common/validators/auth.validators";
 
 export class AuthService {
   static async register(userData: any) {
-    const { email, password, name, role } = userData;
+    // Validate userData using Zod
+    const validData = validateSchema(registerSchema, userData);
+
+    const { email, password, name, role } = validData;
 
     // Check if the user already exists
     const existingUser = await BaseUserModel.findOne({ email });
