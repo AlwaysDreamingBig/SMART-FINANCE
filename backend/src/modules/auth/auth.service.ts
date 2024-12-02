@@ -6,6 +6,7 @@ import { ManagerModel } from "../../database/models/manager/manager.user.model";
 import { DeveloperModel } from "../../database/models/developer/developer.user.model";
 import { ClientModel } from "../../database/models/client/client.user.model";
 import { registerSchema, validateSchema } from "../../common/validators/auth.validators";
+import { AppErrorMessage } from "../../common/enums/app-error.enum";
 
 export class AuthService {
   static async register(userData: any) {
@@ -18,7 +19,7 @@ export class AuthService {
     const existingUser = await BaseUserModel.findOne({ email });
     if (existingUser) {
       // Throw a custom error if the user already exists
-      throwHttpError("User already exists", HTTPSTATUS.CONFLICT);
+      throwHttpError(AppErrorMessage.AUTH_EMAIL_ALREADY_EXISTS, HTTPSTATUS.CONFLICT);
     }
 
     let newUser;
