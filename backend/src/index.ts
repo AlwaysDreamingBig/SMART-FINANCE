@@ -7,6 +7,7 @@ import { connectDatabase } from './database/connectors/mongodbDatabase';
 import { errorHandler, throwAppError, throwHttpError } from './middleware/errorHandler';
 import { HTTPSTATUS } from './config/http.config';
 import { AppErrorMessage } from './common/enums/app-error.enum';
+import registerRoute from './modules/auth/auth.routes';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -55,6 +56,9 @@ app.get('/app-error-demo', async (req: Request, res: Response, next: NextFunctio
     next(err); // Forward the error to the error handler
   }
 });
+
+// Routes
+app.use(`${BASE_PATH}/auth`, registerRoute); // auth routes
 
 
 // Start the server
