@@ -1,6 +1,9 @@
 const enum AppErrorMessage {
     // Authentication Errors
     AUTH_EMAIL_ALREADY_EXISTS = "The email address is already registered.",
+    AUTH_WRONG_PASSWORD = "The provided password or email is incorrect.",
+    AUTH_EMAIL_NOT_VERIFIED = "Please verify your email before trying to login.",
+    AUTH_TOKEN_ERROR = "Error signing the token.",
     AUTH_INVALID_TOKEN = "The provided token is invalid.",
     AUTH_USER_NOT_FOUND = "The user could not be found.",
     AUTH_NOT_FOUND = "Authentication information is missing.",
