@@ -18,4 +18,29 @@ export class AuthController {
       next(error); // Pass error to the error handler middleware
     }
   }
+
+  static async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Extract login data from request body and headers
+      const { email, password, role } = req.body; // Include role if necessary
+      const userAgent = req.headers["user-agent"];
+
+      // Call AuthService login with userData as a single object
+      const result = await AuthService.login({ email, password, role, userAgent });
+
+      if (result){
+        // Respond with success message and tokens
+        res.status(HTTPSTATUS.OK).json({
+          message: "Login successful",
+          user: result.user,
+          tokens: {
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken,
+          },
+        });
+      }
+    } catch (error) {
+      next(error); // Pass error to error handler middleware
+    }
+  }
 }

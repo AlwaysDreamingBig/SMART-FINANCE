@@ -5,5 +5,6 @@ const registerRoute = Router();
 
 // User registration route
 registerRoute.post("/register", AuthController.register);
+registerRoute.post("/login", AuthController.login);
 
 export default registerRoute;
