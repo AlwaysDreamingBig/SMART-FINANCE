@@ -7,5 +7,6 @@ const registerRoute = Router();
 registerRoute.post("/register", AuthController.register);
 registerRoute.post("/login", AuthController.login);
 registerRoute.post("/refresh-token", AuthController.refreshToken);
+registerRoute.post("/verify-email", AuthController.verifyEmail);
 
 export default registerRoute;

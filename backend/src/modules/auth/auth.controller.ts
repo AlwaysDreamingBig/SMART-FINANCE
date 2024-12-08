@@ -63,4 +63,25 @@ export class AuthController {
       next(error); // Pass error to error handler middleware
     }
   }
+
+  static async verifyEmail(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      // Extract login data from request body and headers
+      const { code } = req.body; 
+
+      // Call AuthService
+      const result = await AuthService.verifyEmail(code);
+
+      if (result){
+        // Respond with success message and tokens
+        res.status(HTTPSTATUS.OK).json({
+          message: "Email verification successful!",
+          result: result
+        });
+      }
+    } catch (error) {
+      next(error); // Pass error to error handler middleware
+    }
+  }
 }

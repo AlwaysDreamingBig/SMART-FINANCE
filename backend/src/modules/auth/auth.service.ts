@@ -16,6 +16,8 @@ import { accessTokenSignOptions, adminAccessTokenSignOptions, AdminAccessTPayloa
 import { verifyToken } from "../../common/utils/verify-token";
 import { checkSession } from "../../common/utils/check-session";
 import jwt from "jsonwebtoken";
+import VerificationCodeModel from "../../database/models/verification.model";
+import { VerificationEnum } from "../../common/enums/verification-code.enum";
 
 export class AuthService {
 
@@ -252,6 +254,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * 
+   * @param token the token to refresh
+   * @returns a new refresh token and a new access token
+   */
   static async refreshToken(token: string) {
   
     // Verify the refresh token
@@ -339,6 +346,96 @@ export class AuthService {
         return {
           AccessToken: accessToken,
           RefreshToken: refreshToken,
+        };
+      }
+    }
+  }
+
+  /**
+   * 
+   * @param code the verification code
+   * @returns the updated user
+   */
+  static async verifyEmail(code: string) {
+    // Check for a valid verification code
+    const validCode = await VerificationCodeModel.findValidCode(code, VerificationEnum.EMAIL_VERIFICATION);
+
+    // If no valid code found, throw error
+    if (!validCode) {
+      throwAppError(
+        AppErrorMessage.VERIF_EMAIL_CODE_ERROR,
+        HTTPSTATUS.SERVICE_UNAVAILABLE
+      );
+    } else {
+      // Find the user by userId
+      const user = await BaseUserModel.findById(validCode.userId);
+
+      let __t;
+      let updatedUser;
+
+      if(!user) {
+        throwAppError(AppErrorMessage.AUTH_USER_NOT_FOUND, HTTPSTATUS.NOT_FOUND);
+      } else {
+
+        if ("__t" in user && user.__t) {
+          __t = user.__t;
+        } else {
+          __t = "Base User";
+        }
+
+        // Depending on the value of __t (discriminator), update the specific user model
+        switch (__t) {
+          case "Administrators":
+            updatedUser = await AdminModel.findByIdAndUpdate(
+              user._id,
+              { isEmailVerified: true },
+              { new: true }
+            );
+            break;
+          case "Managers":
+            updatedUser = await ManagerModel.findByIdAndUpdate(
+              user._id,
+              { isEmailVerified: true },
+              { new: true }
+            );
+            break;
+          case "Developers":
+            updatedUser = await DeveloperModel.findByIdAndUpdate(
+              user._id,
+              { isEmailVerified: true },
+              { new: true }
+            );
+            break;
+          case "Clients":
+            updatedUser = await ClientModel.findByIdAndUpdate(
+              user._id,
+              { isEmailVerified: true },
+              { new: true }
+            );
+            break;
+          default:
+            updatedUser = await BaseUserModel.findByIdAndUpdate(
+              user._id,
+              { isEmailVerified: true },
+              { new: true }
+            );
+        }
+
+        // If user not found or unable to update, throw error
+        if (!updatedUser) {
+          throwAppError(
+            AppErrorMessage.USER_UPDATE_ERROR,
+            HTTPSTATUS.INTERNAL_SERVER_ERROR
+          );
+        }
+
+        // Mark the verification code as used
+        await validCode.updateOne({ usedAt: new Date() });
+
+        // Return updated user information
+        return {
+          message: 'Email verified successfully',
+          user: updatedUser,
         };
       }
     }
