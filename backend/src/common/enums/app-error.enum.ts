@@ -18,10 +18,13 @@ const enum AppErrorMessage {
     // Validation and Resource Errors
     VALIDATION_ERROR = "There was a validation error with the provided data.",
     RESOURCE_NOT_FOUND = "The requested resource could not be found.",
+    VERIF_EMAIL_CODE_ERROR = "The given code does not exist or is not valid anymore",
+    USER_UPDATE_ERROR = "Cannot update the user properties.",
   
     // System Errors
     INTERNAL_SERVER_ERROR = "An unexpected error occurred. Please try again later.",
     VERIFICATION_ERROR = "Verification failed. Please check your input.",
+    CREATE_CODE_ERROR = "An error occured when generating the verification code",
   }
   
   export { AppErrorMessage };  
