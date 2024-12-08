@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { HTTPSTATUS } from "../../config/http.config";
+import { VerificationCodeService } from "../../common/utils/create-verification-code";
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
@@ -77,6 +78,26 @@ export class AuthController {
         // Respond with success message and tokens
         res.status(HTTPSTATUS.OK).json({
           message: "Email verification successful!",
+          result: result
+        });
+      }
+    } catch (error) {
+      next(error); // Pass error to error handler middleware
+    }
+  }
+
+  static async TEST(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Extract data from request body and headers
+      const { userId, type } = req.body; 
+
+      // Call AuthService
+      const result = await VerificationCodeService.createVerificationCode(userId, type);
+
+      if (result){
+        // Respond with success message and tokens
+        res.status(HTTPSTATUS.OK).json({
+          message: "Verification Code created successfully!",
           result: result
         });
       }
