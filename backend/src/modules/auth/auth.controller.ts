@@ -43,4 +43,24 @@ export class AuthController {
       next(error); // Pass error to error handler middleware
     }
   }
+
+  static async refreshToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Extract login data from request body and headers
+      const { token } = req.body; 
+
+      // Call AuthService
+      const result = await AuthService.refreshToken(token);
+
+      if (result){
+        // Respond with success message and tokens
+        res.status(HTTPSTATUS.OK).json({
+          message: "New  Tokens were created successfully!",
+          result: result
+        });
+      }
+    } catch (error) {
+      next(error); // Pass error to error handler middleware
+    }
+  }
 }

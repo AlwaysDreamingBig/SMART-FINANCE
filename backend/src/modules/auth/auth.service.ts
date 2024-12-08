@@ -1,7 +1,7 @@
 import { HTTPSTATUS } from "../../config/http.config";
 import { BaseUserModel } from "../../database/models/user.model";
 import { AdminModel } from "../../database/models/admin/admin.user.model";  // Import Admin model
-import { throwHttpError } from "../../middleware/errorHandler";
+import { throwAppError, throwHttpError } from "../../middleware/errorHandler";
 import { ManagerModel } from "../../database/models/manager/manager.user.model";
 import { DeveloperModel } from "../../database/models/developer/developer.user.model";
 import { ClientModel } from "../../database/models/client/client.user.model";
@@ -13,6 +13,9 @@ import { DeveloperSessionModel } from "../../database/models/developer/developer
 import { ClientSessionModel } from "../../database/models/client/client.session.model";
 import { BaseSessionModel } from "../../database/models/session.model";
 import { accessTokenSignOptions, adminAccessTokenSignOptions, AdminAccessTPayload, adminRefreshTokenSignOptions, clientAccessTokenSignOptions, ClientAccessTPayload, clientRefreshTokenSignOptions, developerAccessTokenSignOptions, DeveloperAccessTPayload, developerRefreshTokenSignOptions, managerAccessTokenSignOptions, ManagerAccessTPayload, managerRefreshTokenSignOptions, refreshTokenSignOptions, signJwtToken } from "../../common/utils/jwt";
+import { verifyToken } from "../../common/utils/verify-token";
+import { checkSession } from "../../common/utils/check-session";
+import jwt from "jsonwebtoken";
 
 export class AuthService {
 
@@ -243,8 +246,101 @@ export class AuthService {
           email: user.email,
           name: user.name,
           __t: __t,
+          session: session._id,
         },
       };
+    }
+  }
+
+  static async refreshToken(token: string) {
+  
+    // Verify the refresh token
+    const payload = await verifyToken(token, "refresh");
+
+    if(!payload) {
+      throwAppError(AppErrorMessage.VERIFICATION_ERROR, HTTPSTATUS.BAD_REQUEST) ;
+    } else {
+
+      const { role, sessionId, userId } = payload;
+
+      // Step 2: Check session validity
+      const res = await checkSession(sessionId, role);
+
+      if(res) {
+
+        // Step 3: Generate new access and refresh tokens
+        let accessTokenPayload:
+        | AdminAccessTPayload
+        | ManagerAccessTPayload
+        | DeveloperAccessTPayload
+        | ClientAccessTPayload;
+
+        switch (role) {
+          case "admin":
+            accessTokenPayload = {
+              userId: userId,
+              sessionId: sessionId,
+              role: role, // Include role for admin-specific logic
+            } as AdminAccessTPayload;
+            break;
+          case "Managers":
+            accessTokenPayload = {
+              userId: userId,
+              sessionId: sessionId,
+              role: role, // Include role for admin-specific logic
+            } as ManagerAccessTPayload;
+            break;
+          case "Developers":
+            accessTokenPayload = {
+              userId: userId,
+              sessionId: sessionId,
+              role: role, // Include role for admin-specific logic
+            } as DeveloperAccessTPayload;
+            break;
+          case "Clients":
+            accessTokenPayload = {
+              userId: userId,
+              sessionId: sessionId,
+              role: role, // Include role for admin-specific logic
+            } as ClientAccessTPayload;
+            break;
+          default:
+            accessTokenPayload = {
+              userId: userId,
+              sessionId: sessionId,
+          } as ClientAccessTPayload;
+        }
+
+        const accessToken = signJwtToken(
+          accessTokenPayload,
+          role === "asmin"
+            ? adminAccessTokenSignOptions
+            : role === "manager"
+            ? managerAccessTokenSignOptions
+            : role === "developer"
+            ? developerAccessTokenSignOptions
+            : role === "client"
+            ? clientAccessTokenSignOptions
+            : accessTokenSignOptions
+          );
+
+          const refreshToken = signJwtToken(accessTokenPayload, 
+            role === "admin"
+            ? adminRefreshTokenSignOptions
+            : role === "manager"
+            ? managerRefreshTokenSignOptions
+            : role === "developer"
+            ? developerRefreshTokenSignOptions
+            : role === "client"
+            ? clientRefreshTokenSignOptions
+            : refreshTokenSignOptions
+            );
+
+        return {
+          AccessToken: accessToken,
+          RefreshToken: refreshToken,
+        };
+      }
     }
   }
 
