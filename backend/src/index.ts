@@ -8,6 +8,7 @@ import { errorHandler, throwAppError, throwHttpError } from './middleware/errorH
 import { HTTPSTATUS } from './config/http.config';
 import { AppErrorMessage } from './common/enums/app-error.enum';
 import registerRoute from './modules/auth/auth.routes';
+import { mailRodule } from './mailers/mail.module';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -59,6 +60,7 @@ app.get('/app-error-demo', async (req: Request, res: Response, next: NextFunctio
 
 // Routes
 app.use(`${BASE_PATH}/auth`, registerRoute); // auth routes
+app.use(`${BASE_PATH}/mailer`, mailRodule); // mailing routes
 
 
 // Start the server

@@ -28,6 +28,8 @@ interface AppConfig {
     };
     MONGO_URI: string;
     MONGO_DB_NAME: string;
+    EMAIL_PASS: string;
+    EMAIL_USER: string;
   }
 
 const appConfig = (): AppConfig => ({
@@ -58,6 +60,8 @@ const appConfig = (): AppConfig => ({
     },
     MONGO_URI: getEnv("MONGO_URI"),
     MONGO_DB_NAME: getEnv("MONGO_DB_NAME", "smart_finance"),
+    EMAIL_PASS: getEnv("EMAIL_PASS"),
+    EMAIL_USER: getEnv("EMAIL_USER"),
 });
 
 
