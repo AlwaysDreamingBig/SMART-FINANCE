@@ -86,6 +86,25 @@ export class AuthController {
     }
   }
 
+  static async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Extract data from request body and headers
+      const { email } = req.body; 
+
+      // Call AuthService
+      const result = await AuthService.forgotPassword(email);
+
+      if (result){
+        // Respond with success message and tokens
+        res.status(HTTPSTATUS.OK).json({
+          message: "Verification Link sent successfully!",
+          result: result
+        });
+      }
+    } catch (error) {
+      next(error); // Pass error to error handler middleware
+    }
+  }
   static async TEST(req: Request, res: Response, next: NextFunction) {
     try {
       // Extract data from request body and headers

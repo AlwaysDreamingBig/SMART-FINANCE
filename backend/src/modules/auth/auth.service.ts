@@ -20,6 +20,7 @@ import VerificationCodeModel from "../../database/models/verification.model";
 import { VerificationEnum } from "../../common/enums/verification-code.enum";
 import { mailService } from "../../mailers/mail.service";
 import { VerificationCodeService } from "../../common/utils/create-verification-code";
+import { config } from "../../config/app.config";
 
 export class AuthService {
 
@@ -453,4 +454,37 @@ export class AuthService {
     }
   }
 
+  static async forgotPassword(email: string) {
+    // Check if the user exists
+    const user = await BaseUserModel.findOne({ email });
+    
+    if (!user) {
+      throwHttpError(AppErrorMessage.AUTH_USER_NOT_FOUND, HTTPSTATUS.NOT_FOUND);
+    } else {
+
+      // Generate a reset token
+      const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+        expiresIn: "1h", 
+      });
+
+      // Create a new verification code document
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+      const verificationCode = new VerificationCodeModel({
+        userId: user._id,
+        code: resetToken,
+        type: VerificationEnum.PASSWORD_RESET,
+        expiresAt,
+      });
+
+      await verificationCode.save();
+
+      // Create the reset link
+      const resetLink = `${config.APP_ORIGIN}/reset-password?token=${resetToken}`;
+
+      await mailService.sendResetPasswordEmail(user.email, resetLink);
+
+      return resetLink;
+    }
+  }
 }
