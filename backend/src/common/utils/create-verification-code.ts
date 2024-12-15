@@ -8,9 +8,9 @@ import { generateUniqueCode } from "./generates-code";
 
 export class VerificationCodeService {
   // Function to create a new verification code
-  static async createVerificationCode(userId: string, type: VerificationEnum): Promise<any> {
+  static async createVerificationCode(userId: any, type: VerificationEnum): Promise<any> {
     // Generate a unique verification code (e.g., 6 digits alphanumeric)
-    const code = generateUniqueCode( 32);
+    const code = generateUniqueCode(8);
 
     // Set expiration time (e.g., 15 minutes from now)
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from current time

@@ -18,6 +18,8 @@ import { checkSession } from "../../common/utils/check-session";
 import jwt from "jsonwebtoken";
 import VerificationCodeModel from "../../database/models/verification.model";
 import { VerificationEnum } from "../../common/enums/verification-code.enum";
+import { mailService } from "../../mailers/mail.service";
+import { VerificationCodeService } from "../../common/utils/create-verification-code";
 
 export class AuthService {
 
@@ -90,6 +92,16 @@ export class AuthService {
 
     // Save the user to the appropriate collection
     await newUser.save();
+
+    const Verification = await VerificationCodeService.createVerificationCode(newUser._id, VerificationEnum.EMAIL_VERIFICATION)
+
+    // Send verification email
+    try {
+      await mailService.sendVerificationEmail(email, Verification.code);
+      console.log(`Verification email sent to ${email}`);
+    } catch (error) {
+      throwHttpError('Error sending verification email', HTTPSTATUS.INTERNAL_SERVER_ERROR);
+    }
 
     return newUser;
   };
