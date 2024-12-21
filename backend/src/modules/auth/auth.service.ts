@@ -142,12 +142,10 @@ export class AuthService {
       throwHttpError(AppErrorMessage.AUTH_WRONG_PASSWORD, HTTPSTATUS.UNAUTHORIZED);
     }
 
-    /*
     // Check if the email is verified
     if (!user.isEmailVerified) {
       throwHttpError(AppErrorMessage.AUTH_EMAIL_NOT_VERIFIED, HTTPSTATUS.UNAUTHORIZED);
     }
-    */
 
     let session;
 
