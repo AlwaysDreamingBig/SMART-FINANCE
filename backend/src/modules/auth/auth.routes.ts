@@ -9,6 +9,7 @@ registerRoute.post("/login", AuthController.login);
 registerRoute.post("/refresh-token", AuthController.refreshToken);
 registerRoute.post("/verify-email", AuthController.verifyEmail);
 registerRoute.post("/forgot-password", AuthController.forgotPassword);
+registerRoute.post("/reset-password", AuthController.resetPassword);
 registerRoute.post("/test", AuthController.TEST);
 
 

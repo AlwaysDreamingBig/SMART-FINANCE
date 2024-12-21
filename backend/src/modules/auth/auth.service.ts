@@ -21,6 +21,7 @@ import { VerificationEnum } from "../../common/enums/verification-code.enum";
 import { mailService } from "../../mailers/mail.service";
 import { VerificationCodeService } from "../../common/utils/create-verification-code";
 import { config } from "../../config/app.config";
+import { hashValue } from "../../common/utils/bcrypt";
 
 export class AuthService {
 
@@ -454,6 +455,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * 
+   * @param email the email of the user
+   * @returns the link to the reset password API
+   */
   static async forgotPassword(email: string) {
     // Check if the user exists
     const user = await BaseUserModel.findOne({ email });
@@ -485,6 +491,90 @@ export class AuthService {
       await mailService.sendResetPasswordEmail(user.email, resetLink);
 
       return resetLink;
+    }
+  }
+
+  static async resetPassword(token: string, newPassword: string) {
+
+    // Get the user id from the verificationmodel
+    const verification = await VerificationCodeModel.findValidCode(token, VerificationEnum.PASSWORD_RESET);
+
+    // hash new password 
+    newPassword = await hashValue(newPassword);
+
+    if (!verification){
+      throwHttpError(AppErrorMessage.TOKEN_NOT_FOUND, HTTPSTATUS.NOT_FOUND);
+    } else {
+
+      // Find the user by userId
+      const user = await BaseUserModel.findById(verification.userId);
+
+      let __t;
+      let updatedUser;
+
+      if(!user) {
+        throwAppError(AppErrorMessage.AUTH_USER_NOT_FOUND, HTTPSTATUS.NOT_FOUND);
+      } else {
+
+        if ("__t" in user && user.__t) {
+          __t = user.__t;
+        } else {
+          __t = "Base User";
+        }
+
+        // Depending on the value of __t (discriminator), update the specific user model
+        switch (__t) {
+          case "Administrators":
+            updatedUser = await AdminModel.findByIdAndUpdate(
+              user._id,
+              { password: newPassword },
+            );
+            break;
+          case "Managers":
+            updatedUser = await ManagerModel.findByIdAndUpdate(
+              user._id,
+              { password: newPassword },
+            );
+            break;
+          case "Developers":
+            updatedUser = await DeveloperModel.findByIdAndUpdate(
+              user._id,
+              { password: newPassword },
+            );
+            break;
+          case "Clients":
+            updatedUser = await ClientModel.findByIdAndUpdate(
+              user._id,
+              { password: newPassword },
+            );
+            break;
+          default:
+            updatedUser = await BaseUserModel.findByIdAndUpdate(
+              user._id,
+              { password: newPassword },
+            );
+        }
+
+        // If user not found or unable to update, throw error
+        if (!updatedUser) {
+          throwAppError(
+            AppErrorMessage.USER_PASSWORD_UPDATE_ERROR,
+            HTTPSTATUS.INTERNAL_SERVER_ERROR
+          );
+        }
+
+        //save user
+        await updatedUser?.save();
+
+        // Mark the verification code as used
+        await verification.updateOne({ usedAt: new Date() });
+
+        // Return updated user information
+        return {
+          message: 'Password was changed successfully',
+          user: updatedUser,
+        };
+      }
     }
   }
 }
