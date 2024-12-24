@@ -14,6 +14,9 @@ const enum AppErrorMessage {
     // Access Control Errors
     ACCESS_FORBIDDEN = "You do not have permission to access this resource.",
     ACCESS_UNAUTHORIZED = "Authentication is required to access this resource.",
+    AUTH_USER_UPDATE_FAILED = "Cannot update user's permission level.",
+    AUTH_INSUFFICIENT_PERMISSIONS = "You do not have the necessary permission level!",
+    AUTH_UPDATER_LEVEL_TOO_LOW = "Updater's permission level too low",
   
     // Validation and Resource Errors
     VALIDATION_ERROR = "There was a validation error with the provided data.",
@@ -25,6 +28,11 @@ const enum AppErrorMessage {
     INTERNAL_SERVER_ERROR = "An unexpected error occurred. Please try again later.",
     VERIFICATION_ERROR = "Verification failed. Please check your input.",
     CREATE_CODE_ERROR = "An error occured when generating the verification code",
+
+    // Password Reset errors
+    TOKEN_NOT_FOUND = "The reset password link has expired or is not valid anymore.",
+    USER_PASSWORD_UPDATE_ERROR = "Cannot update the user password.",
+
   }
   
   export { AppErrorMessage };  
