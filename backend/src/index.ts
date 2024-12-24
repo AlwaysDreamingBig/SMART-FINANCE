@@ -9,6 +9,8 @@ import { HTTPSTATUS } from './config/http.config';
 import { AppErrorMessage } from './common/enums/app-error.enum';
 import registerRoute from './modules/auth/auth.routes';
 import { mailRodule } from './mailers/mail.module';
+import passport from 'passport';
+import { setupJwtStrategy } from './common/strategies/jwt.stratety';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,6 +27,12 @@ app.use(cors({
     credentials: true,
 })); // Enable CORS
 app.use(cookieParser()); // Parse cookies
+
+// Initialize passport
+app.use(passport.initialize());
+
+// Setup the JWT strategy (passport JWT)
+setupJwtStrategy(passport);
 
 // Example route for testing
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {

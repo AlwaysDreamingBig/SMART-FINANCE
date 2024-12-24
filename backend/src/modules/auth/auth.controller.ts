@@ -30,6 +30,24 @@ export class AuthController {
       const result = await AuthService.login({ email, password, role, userAgent });
 
       if (result){
+        // Create cookie with accessToken
+        switch (result.user.__t) {
+          case "Administrators":
+            res.cookie("adminAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            break;
+          case "Managers":
+            res.cookie("managerAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            break;
+          case "Developers":
+            res.cookie("developerAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            break;
+          case "Clients":
+            res.cookie("clientAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            break;
+          default:
+            res.cookie("accessToken", result.accessToken, { httpOnly: true, secure: true });
+        }
+        
         // Respond with success message and tokens
         res.status(HTTPSTATUS.OK).json({
           message: "Login successful",
