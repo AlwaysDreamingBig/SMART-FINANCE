@@ -33,19 +33,19 @@ export class AuthController {
         // Create cookie with accessToken
         switch (result.user.__t) {
           case "Administrators":
-            res.cookie("adminAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            res.cookie("adminRefreshToken", result.refreshToken, { httpOnly: true, secure: true, sameSite: "strict", path: "/", });
             break;
           case "Managers":
-            res.cookie("managerAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            res.cookie("managerRefreshToken", result.refreshToken, { httpOnly: true, secure: true, sameSite: "strict", path: "/", });
             break;
           case "Developers":
-            res.cookie("developerAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            res.cookie("developerRefreshToken", result.refreshToken, { httpOnly: true, secure: true, sameSite: "strict", path: "/", });
             break;
           case "Clients":
-            res.cookie("clientAccessToken", result.accessToken, { httpOnly: true, secure: true });
+            res.cookie("clientRefreshToken", result.refreshToken, { httpOnly: true, secure: true, sameSite: "strict", path: "/", });
             break;
           default:
-            res.cookie("accessToken", result.accessToken, { httpOnly: true, secure: true });
+            res.cookie("refreshToken", result.refreshToken, { httpOnly: true, secure: true, sameSite: "strict", path: "/", });
         }
         
         // Respond with success message and tokens
@@ -54,7 +54,7 @@ export class AuthController {
           user: result.user,
           tokens: {
             accessToken: result.accessToken,
-            refreshToken: result.refreshToken,
+            //refreshToken: result.refreshToken,
           },
         });
       }

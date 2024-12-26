@@ -1,11 +1,11 @@
 import passport, { PassportStatic } from "passport";
 import { ExtractJwt, Strategy as JwtStrategy, StrategyOptionsWithRequest } from "passport-jwt";
 import {
-  accessTokenSignOptions,
-  adminAccessTokenSignOptions,
-  managerAccessTokenSignOptions,
-  developerAccessTokenSignOptions,
-  clientAccessTokenSignOptions,
+  refreshTokenSignOptions,
+  adminRefreshTokenSignOptions,
+  managerRefreshTokenSignOptions,
+  developerRefreshTokenSignOptions,
+  clientRefreshTokenSignOptions,
 } from "../utils/jwt";
 import { UserService } from "../../modules/user/user.service";
 import { throwAppError } from "../../middleware/errorHandler";
@@ -17,38 +17,38 @@ import { HTTPSTATUS } from "../../config/http.config";
 const opts: StrategyOptionsWithRequest = {
   jwtFromRequest: ExtractJwt.fromExtractors([
     (req) => {
-      let accessToken;
-      if (req.cookies.accessToken) {
-        accessToken = req.cookies.adminAccessToken;
-      } else if (req.cookies.adminAccessToken) {
-        accessToken = req.cookies.adminAccessToken;
-      } else if (req.cookies.managerAccessToken) {
-        accessToken = req.cookies.managerAccessToken;
-      } else if (req.cookies.developperAccessToken) {
-        accessToken = req.cookies.developperAccessToken;
-      } else if (req.cookies.clientAccessToken) {
-        accessToken = req.cookies.clientAccessToken;
+      let refreshToken;
+      if (req.cookies.refreshToken) {
+        refreshToken = req.cookies.refreshToken;
+      } else if (req.cookies.adminRefreshToken) {
+        refreshToken = req.cookies.adminRefreshToken;
+      } else if (req.cookies.managerRefreshToken) {
+        refreshToken = req.cookies.managerRefreshToken;
+      } else if (req.cookies.developerRefreshToken) {
+        refreshToken = req.cookies.developerRefreshToken;
+      } else if (req.cookies.clientRefreshToken) {
+        refreshToken = req.cookies.clientRefreshToken;
       } 
 
-      if (!accessToken) {
+      if (!refreshToken) {
         throwAppError(AppErrorMessage.ACCESS_UNAUTHORIZED, HTTPSTATUS.UNAUTHORIZED);
       }
-      return accessToken;
+      return refreshToken;
     },
   ]),
   secretOrKeyProvider: (req, rawJwtToken, done) => {
     let secretOrKey: string | undefined;
 
-    if (req.cookies.accessToken) {
-      secretOrKey = accessTokenSignOptions.secret;
-    } else if (req.cookies.adminAccessToken) {
-      secretOrKey = adminAccessTokenSignOptions.secret;
-    } else if (req.cookies.managerAccessToken) {
-      secretOrKey = managerAccessTokenSignOptions.secret;
-    } else if (req.cookies.developerAccessToken) {
-      secretOrKey = developerAccessTokenSignOptions.secret;
-    } else if (req.cookies.clientAccessToken) {
-      secretOrKey = clientAccessTokenSignOptions.secret;
+    if (req.cookies.refreshToken) {
+      secretOrKey = refreshTokenSignOptions.secret;
+    } else if (req.cookies.adminRefreshToken) {
+      secretOrKey = adminRefreshTokenSignOptions.secret;
+    } else if (req.cookies.managerRefreshToken) {
+      secretOrKey = managerRefreshTokenSignOptions.secret;
+    } else if (req.cookies.developerRefreshToken) {
+      secretOrKey = developerRefreshTokenSignOptions.secret;
+    } else if (req.cookies.clientRefreshToken) {
+      secretOrKey = clientRefreshTokenSignOptions.secret;
     }
 
     if (!secretOrKey) {
