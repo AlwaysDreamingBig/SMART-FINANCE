@@ -271,10 +271,10 @@ export class AuthService {
    * @param token the token to refresh
    * @returns a new refresh token and a new access token
    */
-  static async refreshToken(token: string) {
+  static async refreshToken(token: string, type: string) {
   
     // Verify the refresh token
-    const payload = await verifyToken(token, "refresh");
+    const payload = await verifyToken(token, type);
 
     if(!payload) {
       throwAppError(AppErrorMessage.VERIFICATION_ERROR, HTTPSTATUS.BAD_REQUEST) ;
@@ -332,7 +332,7 @@ export class AuthService {
 
         const accessToken = signJwtToken(
           accessTokenPayload,
-          role === "asmin"
+          role === "admin"
             ? adminAccessTokenSignOptions
             : role === "manager"
             ? managerAccessTokenSignOptions
@@ -355,10 +355,16 @@ export class AuthService {
             : refreshTokenSignOptions
             );
 
-        return {
-          AccessToken: accessToken,
-          RefreshToken: refreshToken,
-        };
+        if( type === "refresh") {
+          return {
+            AccessToken: accessToken,
+            RefreshToken: refreshToken,
+          };
+        } else {
+          return {
+            AccessToken: accessToken,
+          };
+        }
       }
     }
   }

@@ -66,15 +66,15 @@ export class AuthController {
   static async refreshToken(req: Request, res: Response, next: NextFunction) {
     try {
       // Extract login data from request body and headers
-      const { token } = req.body; 
+      const { token, type } = req.body; 
 
       // Call AuthService
-      const result = await AuthService.refreshToken(token);
+      const result = await AuthService.refreshToken(token, type);
 
       if (result){
         // Respond with success message and tokens
         res.status(HTTPSTATUS.OK).json({
-          message: "New  Tokens were created successfully!",
+          message: "New Tokens were created successfully!",
           result: result
         });
       }
