@@ -33,6 +33,9 @@ const enum AppErrorMessage {
     TOKEN_NOT_FOUND = "The reset password link has expired or is not valid anymore.",
     USER_PASSWORD_UPDATE_ERROR = "Cannot update the user password.",
 
+    // Session
+    SESSION_NOT_FOUND = "Session not found",
+
   }
   
   export { AppErrorMessage };  

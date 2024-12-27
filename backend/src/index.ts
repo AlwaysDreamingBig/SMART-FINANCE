@@ -11,6 +11,7 @@ import registerRoute from './modules/auth/auth.routes';
 import { mailRodule } from './mailers/mail.module';
 import passport from 'passport';
 import { setupJwtStrategy } from './common/strategies/jwt.stratety';
+import { sessionRoute } from './modules/session/session.routes';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -69,6 +70,7 @@ app.get('/app-error-demo', async (req: Request, res: Response, next: NextFunctio
 // Routes
 app.use(`${BASE_PATH}/auth`, registerRoute); // auth routes
 app.use(`${BASE_PATH}/mailer`, mailRodule); // mailing routes
+app.use(`${BASE_PATH}/session`, sessionRoute); // session routes
 
 
 // Start the server
