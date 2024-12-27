@@ -22,6 +22,7 @@ import { mailService } from "../../mailers/mail.service";
 import { VerificationCodeService } from "../../common/utils/create-verification-code";
 import { config } from "../../config/app.config";
 import { hashValue } from "../../common/utils/bcrypt";
+import { sessionService } from "../session/session.service";
 
 export class AuthService {
 
@@ -580,5 +581,9 @@ export class AuthService {
         };
       }
     }
+  }
+
+  static async logout(userId: string, sessionId: string) {
+    return await sessionService.deleteSession(sessionId, userId);
   }
 }

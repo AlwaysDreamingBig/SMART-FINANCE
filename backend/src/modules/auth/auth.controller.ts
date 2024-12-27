@@ -162,4 +162,33 @@ export class AuthController {
       next(error); // Pass error to error handler middleware
     }
   }
+
+  static async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+
+      const { sessionId, userId} = req.body;
+
+      const result = await AuthService.logout(userId, sessionId);
+
+      if(result) {
+        // Clear the refresh token cookie
+        if (req.cookies.refreshToken) {
+          res.clearCookie("refreshToken");
+        } else if (req.cookies.adminRefreshToken) {
+          res.clearCookie("adminRefreshToken");
+        } else if (req.cookies.managerRefreshToken) {
+          res.clearCookie("managerRefreshToken");
+        } else if (req.cookies.developerRefreshToken) {
+          res.clearCookie("developerRefreshToken");
+        } else if (req.cookies.clientRefreshToken) {
+          res.clearCookie("clientRefreshToken");
+        }
+
+        // Send a success response
+        res.status(HTTPSTATUS.OK).json({ result: true, message: "Successfully logged out." });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
