@@ -36,6 +36,12 @@ const enum AppErrorMessage {
     // Session
     SESSION_NOT_FOUND = "Session not found",
 
+    //MFA
+    GENERATE_QR_ERROR = "Failed to generate QR code URL",
+    IVALID_OTP = "Invalid OTP",
+    MFA_DISABLED = "TOTP verification required",
+    TOTP_VERIFICATION_FAIL = "TOTP verification required",
+
   }
   
   export { AppErrorMessage };  

@@ -6,6 +6,13 @@ interface UserPreferences {
   enable2FA: boolean;
   emailNotification: boolean;
   twoFactorSecret?: string;
+  totp: TOTPPreferences;
+}
+
+interface TOTPPreferences {
+  enable: boolean;
+  totpSecret: string;
+  isTotpVerified: boolean
 }
 
 export interface BaseUserDocument extends Document {
@@ -20,8 +27,15 @@ export interface BaseUserDocument extends Document {
   comparePassword(value: string): Promise<boolean>;
 }
 
+const TOTPPreferencesSchema = new Schema<TOTPPreferences>({
+  enable: { type: Boolean, default: false },
+  isTotpVerified: { type: Boolean, default: false },
+  totpSecret: { type: String, required: false },
+});
+
 const userPreferencesSchema = new Schema<UserPreferences>({
   enable2FA: { type: Boolean, default: false },
+  totp: { type: TOTPPreferencesSchema, default: {} },
   emailNotification: { type: Boolean, default: true },
   twoFactorSecret: { type: String, required: false },
 });
