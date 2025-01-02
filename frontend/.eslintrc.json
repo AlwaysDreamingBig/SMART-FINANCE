@@ -1,0 +1,96 @@
+{
+  "plugins": ["tailwindcss", "unused-imports"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier",
+    "plugin:tailwindcss/recommended",
+    "standard"
+  ],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
+    "space-before-function-paren": ["error", "never"], // No space before function parentheses
+    "tailwindcss/classnames-order": "off", // Disable classnames-order rule
+    /*
+    "tailwindcss/classnames-order": ["error", {
+      "order": [
+        "position", 
+        "display", 
+        "flex", 
+        "grid", 
+        "float", 
+        "clear", 
+        "object", 
+        "box-sizing", 
+        "width", 
+        "height", 
+        "min-width", 
+        "max-width", 
+        "min-height", 
+        "max-height", 
+        "margin", 
+        "padding", 
+        "border-radius", 
+        "font-size", 
+        "font-weight", 
+        "line-height", 
+        "letter-spacing", 
+        "text-align", 
+        "color", 
+        "background-color", 
+        "opacity", 
+        "box-shadow", 
+        "z-index", 
+        "transition", 
+        "transform", 
+        "cursor", 
+        "visibility", 
+        "overflow", 
+        "resize", 
+        "pointer-events", 
+        "user-select", 
+        "align-items", 
+        "justify-content", 
+        "content", 
+        "gap", 
+        "columns", 
+        "text-transform", 
+        "list-style-type", 
+        "object-fit", 
+        "object-position", 
+        "visibility"
+      ]
+    }],
+    */
+    "tailwindcss/no-custom-classname": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": "warn"
+  },
+  "settings": {
+    "tailwindcss": {
+      "callees": ["cn"],
+      "config": "./tailwind.config.ts"
+    },
+    "next": {
+      "rootDir": ["./"]
+    }
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "./next",
+    "assets/",
+    "public/",
+    "dist/",
+    "build/"
+  ]
+}

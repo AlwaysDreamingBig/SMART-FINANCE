@@ -1,0 +1,16 @@
+1- Setup environment
+
+    - Install nextjs
+        - npx create-next-app ./
+
+    - Setup nextjs app
+        - update layout
+            - metadate
+            - fonts
+
+    -Eslint and prettier
+        - install packages on vscode
+        - npm install --save-dev eslint@8.57.0 eslint-config-next eslint-config-standard eslint-config-prettier eslint-plugin-tailwindcss eslint-plugin-unused-imports @typescript-eslint/parser
+        - npm install --save-dev prettier @ianvs/prettier-plugin-sort-imports prettier-plugin-tailwindcss
+        - create eslintrc and prettierrc files
+        create .vscode/settings
