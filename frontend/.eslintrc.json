@@ -20,7 +20,10 @@
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
     "space-before-function-paren": ["error", "never"], // No space before function parentheses
+    "comma-dangle": "off",
+    "@typescript-eslint/no-require-imports": "off",
     "tailwindcss/classnames-order": "off", // Disable classnames-order rule
+    "multiline-ternary": ["off"],
     /*
     "tailwindcss/classnames-order": ["error", {
       "order": [
