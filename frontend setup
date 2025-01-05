@@ -14,3 +14,6 @@
         - npm install --save-dev prettier @ianvs/prettier-plugin-sort-imports prettier-plugin-tailwindcss
         - create eslintrc and prettierrc files
         create .vscode/settings
+        - use shadcn for form
+            - npx shadcn@latest init
+            - npx shadcn@latest add form
