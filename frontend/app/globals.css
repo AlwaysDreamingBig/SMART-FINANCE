@@ -203,7 +203,7 @@
     @apply outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
   .shad-input {
-    @apply shad-no-focus body-2 bg-inputs border-2 p-2 shadow-none placeholder:text-light-200 !important;
+    @apply shad-no-focus body-2 border-2 bg-inputs p-2 shadow-none placeholder:text-light-200 !important;
   }
 
   .shad-form-item {
@@ -213,7 +213,7 @@
     @apply body-2 w-full pt-2 text-light-100 !important;
   }
   .shad-form-message {
-    @apply body-2 ml-4 text-red !important;
+    @apply body-2 text-red ml-4 !important;
   }
   .shad-alert-dialog {
     @apply max-w-[95%] space-y-4 rounded-xl bg-white px-4 py-10 outline-none sm:w-fit md:rounded-[30px] md:px-8 !important;
@@ -355,7 +355,7 @@
 
   /* AuthForm */
   .auth-form {
-    @apply mb-5 mt-10 flex max-h-[1100px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8 !important;
+    @apply mb-5 mt-10 flex max-h-[1200px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8 !important;
   }
   .form-title {
     @apply h2 text-center font-semibold text-gray-900 !important;
@@ -413,7 +413,7 @@
   }
 
   .error-toast {
-    @apply !rounded-[10px] bg-red !important;
+    @apply bg-red !rounded-[10px] !important;
   }
 
   /* Header */
