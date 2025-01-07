@@ -22,25 +22,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:
-      type === "sign-in"
-        ? {
-            email: "",
-            password: "",
-          }
-        : {
-            firstName: "",
-            lastName: "",
-            address1: "",
-            city: "",
-            state: "",
-            postalCode: "",
-            dateOfBirth: "",
-            ssn: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          },
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      address1: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      dateOfBirth: "",
+      ssn: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   // 2. Define a submit handler.
