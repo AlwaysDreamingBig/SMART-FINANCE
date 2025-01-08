@@ -6,8 +6,8 @@ interface UserState {
     id: string;
     email: string;
     name: string;
-    __t: string;
-    session: string;
+    __t?: string;
+    session?: string;
   } | null; // Adjust fields as needed
   error: string | null;
   loading: boolean;
@@ -34,8 +34,8 @@ const userSlice = createSlice({
         id: string;
         email: string;
         name: string;
-        __t: string;
-        session: string;
+        __t?: string;
+        session?: string;
       }>
     ) => {
       state.currentUser = action.payload;

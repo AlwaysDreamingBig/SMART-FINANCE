@@ -1,8 +1,19 @@
 "use client";
 
+import { extractHttpErrorMessage } from "@/lib/error-handler";
+import { succeedAuthResponseHandler, User } from "@/lib/response-handler";
 import { authFormSchema } from "@/lib/utils";
+import { startSession } from "@/redux/session/sessionSlice";
+import {
+  signError,
+  signInFailure,
+  signInStart,
+  signInSuccess,
+  signLoading,
+} from "@/redux/user/userSlice";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,8 +26,22 @@ import SocialButtons from "./SocialButton";
 
 type FormType = "sign-in" | "sign-up";
 
+type UserData = {
+  role: string | undefined;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  name?: string;
+};
+
 const AuthForm = ({ type }: { type: FormType }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = useSelector(signLoading);
+  const error = useSelector(signError);
+
+  const dispatch = useDispatch();
+  const [failure, setFailure] = useState<boolean>(false);
+  const [success, setSuccess] = useState(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const formSchema = authFormSchema(type);
   // 1. Define your form.
@@ -34,17 +59,101 @@ const AuthForm = ({ type }: { type: FormType }) => {
       email: "",
       password: "",
       confirmPassword: "",
+      role: "client",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    setIsLoading(false);
-  }
+  const makeApiRequest = async (url: string, userData: UserData) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(userData),
+    });
+
+    // Check if the response is ok
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HTTP error! Status: ${res.status} - ${errorText}`);
+    }
+
+    return res.json(); // Return the parsed JSON response
+  };
+
+  const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    dispatch(signInStart());
+
+    try {
+      let url = "";
+      let userData: UserData = {
+        role: "",
+        email: "",
+        password: "",
+      };
+
+      if (type === "sign-in") {
+        url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`;
+        userData = {
+          role: formData.role,
+          email: formData.email,
+          password: formData.password,
+        };
+      } else if (type === "sign-up") {
+        url = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`;
+        userData = {
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          role: formData.role,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        };
+      }
+
+      if (url) {
+        const responseData = await makeApiRequest(url, userData);
+
+        if (responseData.success === false) {
+          dispatch(signInFailure(responseData.message));
+          setFailure(true);
+          return;
+        }
+
+        // Get the user from response
+        const user = succeedAuthResponseHandler(responseData, "user") as User;
+        dispatch(signInSuccess(user));
+        console.log("User:", user);
+
+        // Get the message from response
+        const responseMessage = succeedAuthResponseHandler(
+          responseData,
+          "message"
+        ) as string;
+        setMessage(responseMessage);
+
+        if (type === "sign-in") {
+          // Get the token from response
+          const token = succeedAuthResponseHandler(
+            responseData,
+            "token"
+          ) as string;
+          dispatch(startSession({ sessionToken: token, sessionExpiry: "" }));
+        }
+
+        setSuccess(responseData);
+      }
+    } catch (err) {
+      // Ensure err is a string or convert it to one
+      const errorString = err instanceof Error ? err.message : String(err);
+
+      // Call the function to extract the error message
+      const errorMessage = extractHttpErrorMessage(errorString);
+      setFailure(true);
+      dispatch(signInFailure(errorMessage));
+    }
+  };
 
   return (
     <section className="auth-form px-10">
@@ -170,6 +279,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
             </div>
           </form>
         </Form>
+
+        {success && <div className="text-center text-green-500">{message}</div>}
+        {failure && <div className="text-center text-red-500">{error}</div>}
 
         {/* Separator */}
         <div className="my-6 flex items-center">

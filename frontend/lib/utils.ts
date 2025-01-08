@@ -23,4 +23,5 @@ export const authFormSchema = (type: string) =>
     email: z.string().email(),
     password: z.string().min(8),
     confirmPassword: z.string(),
+    role: z.string().optional(),
   });
