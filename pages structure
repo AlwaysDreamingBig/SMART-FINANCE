@@ -1,0 +1,42 @@
+/pages
+  /Dashboard/page.tsx                # Main dashboard
+  /PFM                               # Personal Finance Management module
+    /[sessionId]
+      /[userId]
+        /Dashboard/page.tsx         # PFM dashboard
+        /Budgets/page.tsx           # Budgets page
+        /Transactions/page.tsx      # Transactions page
+        /Payments/page.tsx          # Payments page
+        /SavingGoals/page.tsx       # Saving Goals page
+        /ReportsAnalytics/page.tsx  # Reports and Analytics
+        /NotificationsAlerts/page.tsx # Notifications and Alerts
+  /LMC                               # Loan Management and Comparison module
+    /[sessionId]
+      /[userId]
+        /Dashboard/page.tsx         # LMC dashboard
+        /RepaymentSchedule/page.tsx # Repayment Schedule
+        /LoanComparison/page.tsx    # Loan Comparison
+        /AffordabilityCalculator/page.tsx # Affordability Calculator
+        /AppChecklist/page.tsx      # Application Checklist
+        /TipsRessources/page.tsx    # Tips and Resources
+        /Savings/page.tsx           # Savings (requires TOTP)
+  /AIFDS                             # AI Fraud Detection System module
+    /[sessionId]
+      /[userId]
+        /Dashboard/page.tsx         # AIFDS dashboard
+        /FlaggedTransactions/page.tsx # Flagged Transactions
+        /TransactionMonitoring/page.tsx # Transaction Monitoring
+        /AnalyticsInsights/page.tsx # Analytics and Insights
+        /FraudPrevention/page.tsx   # Fraud Prevention
+        /ModelTraining/page.tsx     # Model Training
+  /user                              # User profile and settings
+    /[sessionId]
+      /[userId]
+        /Profile/page.tsx           # User profile
+        /Settings/page.tsx          # User settings
+  /bank                              # Bank Management module
+    /[sessionId]
+      /[userId]
+        /Dashboard/page.tsx         # Bank management dashboard
+        /MyBanks/page.tsx           # My Banks
+        /ConnectBank/page.tsx       # Connect a new bank
