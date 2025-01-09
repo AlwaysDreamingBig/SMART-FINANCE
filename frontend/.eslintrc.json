@@ -1,5 +1,5 @@
 {
-  "plugins": ["tailwindcss", "unused-imports"],
+  "plugins": ["tailwindcss", "unused-imports", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,
@@ -14,7 +14,9 @@
     "next/typescript",
     "prettier",
     "plugin:tailwindcss/recommended",
-    "standard"
+    "standard",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "semi": ["error", "always"],
