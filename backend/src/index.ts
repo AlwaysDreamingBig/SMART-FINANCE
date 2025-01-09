@@ -13,6 +13,7 @@ import passport from 'passport';
 import { setupJwtStrategy } from './common/strategies/jwt.stratety';
 import { sessionRoute } from './modules/session/session.routes';
 import totpRouter from './modules/mfa/totp/totp.routes';
+import { userRoute } from './modules/user/user.routes';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -73,6 +74,7 @@ app.use(`${BASE_PATH}/auth`, registerRoute); // auth routes
 app.use(`${BASE_PATH}/mailer`, mailRodule); // mailing routes
 app.use(`${BASE_PATH}/session`, sessionRoute); // session routes
 app.use(`${BASE_PATH}/totp`, totpRouter); // totp routes
+app.use(`${BASE_PATH}/user`, userRoute); // user routes
 
 
 // Start the server

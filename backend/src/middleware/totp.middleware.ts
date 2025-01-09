@@ -31,3 +31,29 @@ export const isTotpVerified = async (req: Request, res: Response, next: NextFunc
         next(error);
     }
 };
+
+export const isTotpEnabledd = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+      const { userId } = req.params;
+
+      const result = await UserService.findUserById(userId);
+    
+      const User = result?.user;
+
+      const MFAenable = User?.userPreferences.enable2FA;
+
+      if (!MFAenable) {
+          throwAppError(AppErrorMessage.MFA_DISABLED, HTTPSTATUS.FORBIDDEN);
+      }
+    
+      const totpVerified = User?.userPreferences.totp.enable;
+    
+      if (!totpVerified) {
+        throwAppError(AppErrorMessage.TOTP_VERIFICATION_FAIL, HTTPSTATUS.FORBIDDEN);
+      }
+    
+      next();
+  } catch (error) {
+      next(error);
+  }
+};

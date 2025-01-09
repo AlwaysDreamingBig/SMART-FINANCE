@@ -426,4 +426,13 @@ export class UserService {
         };
     }
     
+    static async enableMfa(userId: string, enable: boolean): Promise<void> {
+        const result =  await UserService.findUserById(userId);
+        const User = result?.user;
+    
+        if (User) {
+          User.userPreferences.enable2FA = enable;
+          User.save(); 
+        }
+    }  
 }
