@@ -1,7 +1,13 @@
 "use client";
 
+import { login, register } from "@/lib/apiSpecific";
 import { extractHttpErrorMessage } from "@/lib/error-handler";
-import { succeedAuthResponseHandler, User } from "@/lib/response-handler";
+import {
+  AuthApiResponse,
+  initAuthApiResponse,
+  succeedAuthResponseHandler,
+  User,
+} from "@/lib/response-handler";
 import { authFormSchema } from "@/lib/utils";
 import { startSession } from "@/redux/session/sessionSlice";
 import {
@@ -26,21 +32,13 @@ import SocialButtons from "./SocialButton";
 
 type FormType = "sign-in" | "sign-up";
 
-type UserData = {
-  role: string | undefined;
-  email: string;
-  password: string;
-  confirmPassword?: string;
-  name?: string;
-};
-
 const AuthForm = ({ type }: { type: FormType }) => {
   const isLoading = useSelector(signLoading);
   const error = useSelector(signError);
 
   const dispatch = useDispatch();
   const [failure, setFailure] = useState<boolean>(false);
-  const [success, setSuccess] = useState(null);
+  const [success, setSuccess] = useState<AuthApiResponse>(initAuthApiResponse);
   const [message, setMessage] = useState<string | null>(null);
 
   const formSchema = authFormSchema(type);
@@ -64,91 +62,59 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   // 2. Define a submit handler.
-  const makeApiRequest = async (url: string, userData: UserData) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(userData),
-    });
-
-    // Check if the response is ok
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(`HTTP error! Status: ${res.status} - ${errorText}`);
-    }
-
-    return res.json(); // Return the parsed JSON response
-  };
-
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     dispatch(signInStart());
 
     try {
-      let url = "";
-      let userData: UserData = {
-        role: "",
-        email: "",
-        password: "",
-      };
+      let responseData;
 
       if (type === "sign-in") {
-        url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`;
-        userData = {
-          role: formData.role,
+        responseData = await login({
           email: formData.email,
           password: formData.password,
-        };
+          role: formData.role,
+        });
       } else if (type === "sign-up") {
-        url = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`;
-        userData = {
+        responseData = await register({
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           role: formData.role,
           email: formData.email,
           password: formData.password,
           confirmPassword: formData.confirmPassword,
-        };
+        });
       }
 
-      if (url) {
-        const responseData = await makeApiRequest(url, userData);
+      // Ensure responseData is defined before accessing its properties
+      if (!responseData) {
+        throw new Error("No response data received");
+      }
 
-        if (responseData.success === false) {
-          dispatch(signInFailure(responseData.message));
-          setFailure(true);
-          return;
-        }
+      if ("success" in responseData && responseData.success === false) {
+        dispatch(signInFailure(responseData.message));
+        setFailure(true);
+        return;
+      }
 
-        // Get the user from response
-        const user = succeedAuthResponseHandler(responseData, "user") as User;
-        dispatch(signInSuccess(user));
-        console.log("User:", user);
+      const user = succeedAuthResponseHandler(responseData, "user") as User;
+      dispatch(signInSuccess(user));
 
-        // Get the message from response
-        const responseMessage = succeedAuthResponseHandler(
+      const responseMessage = succeedAuthResponseHandler(
+        responseData,
+        "message"
+      ) as string;
+      setMessage(responseMessage);
+
+      if (type === "sign-in") {
+        const token = succeedAuthResponseHandler(
           responseData,
-          "message"
+          "token"
         ) as string;
-        setMessage(responseMessage);
-
-        if (type === "sign-in") {
-          // Get the token from response
-          const token = succeedAuthResponseHandler(
-            responseData,
-            "token"
-          ) as string;
-          dispatch(startSession({ sessionToken: token, sessionExpiry: "" }));
-        }
-
-        setSuccess(responseData);
+        dispatch(startSession({ sessionToken: token, sessionExpiry: "" }));
       }
-    } catch (err) {
-      // Ensure err is a string or convert it to one
-      const errorString = err instanceof Error ? err.message : String(err);
 
-      // Call the function to extract the error message
+      setSuccess(responseData);
+    } catch (err) {
+      const errorString = err instanceof Error ? err.message : String(err);
       const errorMessage = extractHttpErrorMessage(errorString);
       setFailure(true);
       dispatch(signInFailure(errorMessage));

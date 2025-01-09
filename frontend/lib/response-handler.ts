@@ -12,6 +12,11 @@ export type AuthApiResponse = {
   tokens?: string;
 };
 
+export const initAuthApiResponse: AuthApiResponse = {
+  message: "",
+  user: { id: "", email: "", name: "" } as User, // Default to an empty object, or replace with default values for User
+};
+
 export function succeedAuthResponseHandler(
   response: AuthApiResponse,
   returnType: "message" | "user" | "token"
