@@ -1,19 +1,19 @@
 "use client";
 
-import { Message, sendVerifEmail } from "@/lib/apiSpecific";
+import { Message, sendVerifEmail, VerifyEmailCode } from "@/lib/apiSpecific";
 import { extractHttpErrorMessage } from "@/lib/error-handler";
 import { extractEmailFromPath } from "@/lib/utils";
 import React, { JSX, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import CodeModal from "@/components/CodeModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail } from "lucide-react";
 
 export default function VerifyEmail(): JSX.Element {
-  const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [enterCode, setEnterCode] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -51,10 +51,6 @@ export default function VerifyEmail(): JSX.Element {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleReturnToLogin = () => {
-    router.push("/sign-in");
   };
 
   return (
@@ -105,14 +101,16 @@ export default function VerifyEmail(): JSX.Element {
               {isLoading ? "Resending..." : "Resend email"}
             </Button>
 
-            <Button
-              variant="link"
-              onClick={handleReturnToLogin}
-              className="text-xs sm:text-base"
-              aria-label="Return to Login Button"
-            >
-              Return to login →
-            </Button>
+            <div className="flex flex-col items-center justify-center gap-4 sm:gap-10">
+              <Button
+                variant="link"
+                onClick={() => setEnterCode(true)}
+                className="text-xs sm:text-base"
+                aria-label="Return to Login Button"
+              >
+                Resume login →
+              </Button>
+            </div>
           </div>
 
           {message && (
@@ -129,6 +127,15 @@ export default function VerifyEmail(): JSX.Element {
           </p>
         </CardContent>
       </Card>
+      {enterCode && (
+        <CodeModal
+          email={email}
+          setIsOpen={setEnterCode}
+          codeLength={8}
+          onVerifyCode={VerifyEmailCode}
+          URL="/sign-in"
+        />
+      )}{" "}
     </div>
   );
 }

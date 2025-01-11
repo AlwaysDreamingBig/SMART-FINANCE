@@ -23,6 +23,10 @@ export interface Email {
   email: string;
 }
 
+export interface Code {
+  code: string;
+}
+
 export const login = (data: LoginData) =>
   makeApiRequest<AuthApiResponse, LoginData>("/auth/login", {
     method: "POST",
@@ -37,6 +41,12 @@ export const register = (data: RegisterData) =>
 
 export const sendVerifEmail = (data: Email) =>
   makeApiRequest<Message, Email>("/mailer/send-verification", {
+    method: "POST",
+    body: data,
+  });
+
+export const VerifyEmailCode = (data: Code) =>
+  makeApiRequest<Message, Code>("/auth/verify-email", {
     method: "POST",
     body: data,
   });
