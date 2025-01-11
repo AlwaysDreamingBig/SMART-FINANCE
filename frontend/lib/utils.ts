@@ -25,3 +25,12 @@ export const authFormSchema = (type: string) =>
     confirmPassword: z.string(),
     role: z.string().optional(),
   });
+
+export const extractEmailFromPath = (path: string): string | null => {
+  const pathSegments = path.split("/");
+  const potentialEmail = pathSegments[pathSegments.length - 1];
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(potentialEmail)
+    ? decodeURIComponent(potentialEmail)
+    : null;
+};
