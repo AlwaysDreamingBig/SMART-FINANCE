@@ -105,20 +105,18 @@ const TwoLayerSection: React.FC<TwoLayerSectionProps> = ({
 
       {/* Second Layer (Centered Rectangle) */}
       <div
-        className="relative z-10 mx-auto mt-20 flex items-center justify-center rounded-xl p-10 opacity-100 shadow-lg backdrop-blur-md transition duration-500 ease-in-out"
+        className="relative z-10 mx-auto mt-20 flex items-center justify-center rounded-xl p-4 opacity-100 shadow-lg backdrop-blur-md transition duration-500 ease-in-out"
         style={{
           width: "80%",
-          maxWidth: "600px",
-          height: "400px",
         }}
       >
         <div className="rounded-lg bg-gradient-to-b from-gray-800 to-gray-900 p-8 text-center shadow-lg">
-          <h1 className="text-4xl font-extrabold text-white">
+          <h1 className="text-3xl font-extrabold text-green-400">
             Take Control of Your Financial Future
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-lg text-green-400">
+          <p className="mx-auto mt-4 max-w-lg text-base text-white">
             Welcome to{" "}
-            <span className="font-bold text-green-500">SmartFinance</span>—your
+            <span className="font-bold text-green-400">SmartFinance</span>—your
             all-in-one solution to manage personal finances, optimize savings,
             calculate loans, and protect against fraud. Empower your financial
             journey today!
@@ -126,12 +124,12 @@ const TwoLayerSection: React.FC<TwoLayerSectionProps> = ({
           <div className="mt-8 space-y-4">
             <Link
               href="/"
-              className="text-lg font-semibold text-blue-600 underline hover:text-blue-700"
+              className="text-sm font-semibold text-blue-600 underline hover:text-blue-700"
               aria-label="See everything that’s new"
             >
               See everything that’s new →
             </Link>
-            <p className="text-sm text-gray-400">
+            <p className="text-xs text-gray-400">
               No credit card required. Sign up in less than 2 minutes.
             </p>
           </div>

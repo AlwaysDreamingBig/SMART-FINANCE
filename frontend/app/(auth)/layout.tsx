@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </section>
 
-      <section className="hidden w-1/2 items-center justify-center lg:flex">
+      <section className="hidden w-[45%] items-center justify-center lg:flex">
         <TwoLayerSection />
       </section>
     </div>
