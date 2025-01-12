@@ -1,6 +1,7 @@
 "use client";
 
-import { login, register } from "@/lib/apiSpecific";
+import { login, Message, register, sendVerifEmail } from "@/lib/apiSpecific";
+import { USER_NOT_VERIFIED } from "@/lib/constants";
 import { extractHttpErrorMessage } from "@/lib/error-handler";
 import {
   AuthApiResponse,
@@ -8,7 +9,7 @@ import {
   succeedAuthResponseHandler,
   User,
 } from "@/lib/response-handler";
-import { authFormSchema } from "@/lib/utils";
+import { authFormSchema, customDelay } from "@/lib/utils";
 import { startSession } from "@/redux/session/sessionSlice";
 import {
   signError,
@@ -22,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +42,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const [failure, setFailure] = useState<boolean>(false);
   const [success, setSuccess] = useState<AuthApiResponse>(initAuthApiResponse);
   const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const [loader, setLoader] = useState<boolean>(false);
 
   const formSchema = authFormSchema(type);
   // 1. Define your form.
@@ -113,11 +117,43 @@ const AuthForm = ({ type }: { type: FormType }) => {
       }
 
       setSuccess(responseData);
+      setLoader(true);
+
+      if (type === "sign-in") {
+        await customDelay(1000);
+
+        router.replace("/Dashboard");
+      } else {
+        await customDelay(1000);
+
+        router.replace(`/mfa/verif-email/${formData.email}`);
+      }
     } catch (err) {
       const errorString = err instanceof Error ? err.message : String(err);
       const errorMessage = extractHttpErrorMessage(errorString);
       setFailure(true);
       dispatch(signInFailure(errorMessage));
+
+      if (errorMessage === USER_NOT_VERIFIED) {
+        try {
+          const responseData: Message = await sendVerifEmail({
+            email: formData.email,
+          });
+          if (responseData.message) {
+            setMessage(responseData.message);
+          }
+        } catch (error) {
+          const errorString =
+            error instanceof Error ? error.message : String(error);
+          const errorMessage = extractHttpErrorMessage(errorString);
+          setMessage(
+            error instanceof Error
+              ? errorMessage
+              : "An unknown error occurred. Please try again."
+          );
+        }
+        router.replace(`/mfa/verif-email/${formData.email}`);
+      }
     }
   };
 
@@ -246,7 +282,21 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </form>
         </Form>
 
-        {success && <div className="text-center text-green-500">{message}</div>}
+        {success && (
+          <div className="flex items-center justify-center space-x-2">
+            {loader && (
+              <Image
+                src="/assets/svg/spinning-circles.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="ml-2 text-green-600"
+              />
+            )}
+
+            <div className="text-center text-green-500">{message}</div>
+          </div>
+        )}
         {failure && <div className="text-center text-red-500">{error}</div>}
 
         {/* Separator */}
