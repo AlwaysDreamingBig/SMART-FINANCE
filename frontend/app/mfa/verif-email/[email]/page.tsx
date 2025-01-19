@@ -14,6 +14,7 @@ export default function VerifyEmail(): JSX.Element {
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [enterCode, setEnterCode] = useState(false);
+  const VERIF_OK = "Verification email sent successfully";
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -54,8 +55,8 @@ export default function VerifyEmail(): JSX.Element {
   };
 
   return (
-    <div className="m-auto flex max-h-screen items-center justify-center p-4">
-      <Card className="w-full">
+    <div className="m-auto flex h-screen items-center justify-center p-4">
+      <Card className="w-1/2">
         <CardContent className="flex flex-col items-center justify-center space-y-6 p-8">
           <div
             className="mt-4 flex size-24 items-center justify-center rounded-full bg-[#90C695] p-4"
@@ -112,10 +113,11 @@ export default function VerifyEmail(): JSX.Element {
               </Button>
             </div>
           </div>
-
           {message && (
             <p
-              className="mt-4 text-center text-xs text-red-500 md:text-sm"
+              className={`mt-4 text-center text-xs md:text-sm ${
+                message === VERIF_OK ? "text-green-600" : "text-red-500"
+              }`}
               aria-live="polite"
             >
               {message}
