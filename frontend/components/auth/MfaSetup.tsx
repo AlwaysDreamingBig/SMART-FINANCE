@@ -1,6 +1,7 @@
 "use client";
 
 import React, { JSX } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,6 +28,7 @@ export default function MfaSetup({
   userId,
   onEnableMfa,
 }: MfaSetupProps): JSX.Element {
+  const router = useRouter();
   // Sends API request to enable MFA
   const enableMfa = async (userId: string) => {
     console.log(`Enabling MFA for user: ${userId}`);
@@ -37,8 +39,7 @@ export default function MfaSetup({
 
   // Navigate to the next page
   const skip = async () => {
-    console.log("Navigating to the next page");
-    // Add navigation logic here
+    router.replace("/Dashboard");
   };
 
   return (

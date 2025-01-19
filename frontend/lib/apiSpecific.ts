@@ -27,6 +27,16 @@ export interface Code {
   code: string;
 }
 
+export interface Eanable {
+  userId: string | undefined;
+  enable: boolean;
+}
+
+export interface EanableResponse {
+  message: string;
+  session: string;
+}
+
 export const login = (data: LoginData) =>
   makeApiRequest<AuthApiResponse, LoginData>("/auth/login", {
     method: "POST",
@@ -47,6 +57,18 @@ export const sendVerifEmail = (data: Email) =>
 
 export const VerifyEmailCode = (data: Code) =>
   makeApiRequest<Message, Code>("/auth/verify-email", {
+    method: "POST",
+    body: data,
+  });
+
+export const EanableMfa = (data: Eanable) =>
+  makeApiRequest<EanableResponse, Eanable>(`/user/mfa/enable/${data.userId}`, {
+    method: "POST",
+    body: data,
+  });
+
+export const EanableTotp = (data: Eanable) =>
+  makeApiRequest<EanableResponse, Eanable>(`/user/totp/enable/${data.userId}`, {
     method: "POST",
     body: data,
   });
