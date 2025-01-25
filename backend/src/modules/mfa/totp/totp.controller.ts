@@ -11,7 +11,7 @@ export class TotpController {
    */
   static async generateQRCode(req: Request, res: Response, next: NextFunction) {
     try {
-      const {userId} = req.body;
+      const {userId} = req.params;
 
       const qrCodeURL = await TotpService.generateQRCodeURL(userId);
       
@@ -19,7 +19,14 @@ export class TotpController {
         throwAppError(AppErrorMessage.GENERATE_QR_ERROR, HTTPSTATUS.INTERNAL_SERVER_ERROR);
       }
 
-      res.status(HTTPSTATUS.OK).json({ result: qrCodeURL });
+      // Generate the QR code as a data URL
+      const qrCodeDataURL = await QRCode.toDataURL(qrCodeURL, {
+        errorCorrectionLevel: "H", // High error correction
+        width: 300, // Adjust size as needed
+      });
+
+      res.status(HTTPSTATUS.OK).json({ result: qrCodeDataURL });
+
     } catch (error) {
       next(error);
     }

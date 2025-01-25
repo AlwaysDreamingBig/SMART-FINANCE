@@ -27,6 +27,14 @@ export interface Code {
   code: string;
 }
 
+export interface UserId {
+  userId: string;
+}
+
+export interface Result {
+  result: string;
+}
+
 export interface Eanable {
   userId: string | undefined;
   enable: boolean;
@@ -71,4 +79,9 @@ export const EanableTotp = (data: Eanable) =>
   makeApiRequest<EanableResponse, Eanable>(`/user/totp/enable/${data.userId}`, {
     method: "POST",
     body: data,
+  });
+
+export const GenerateTotpCode = (data: UserId) =>
+  makeApiRequest<Result, UserId>(`/totp/generate-qr/${data.userId}`, {
+    method: "GET",
   });

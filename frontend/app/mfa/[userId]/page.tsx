@@ -5,8 +5,11 @@ import {
   EanableMfa,
   EanableResponse,
   EanableTotp,
+  GenerateTotpCode,
+  Result,
 } from "@/lib/apiSpecific";
 import { extractHttpErrorMessage } from "@/lib/error-handler";
+import { getErrorMessage } from "@/lib/utils";
 import { connectedtUser } from "@/redux/user/userSlice";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -19,6 +22,7 @@ const Page = () => {
   const currentUser = useSelector(connectedtUser);
   const Eanable: Eanable = { userId: currentUser?.id, enable: true };
   const [message, setMessage] = useState<string | null>(null);
+  const [qrcode, setQrCode] = useState<string>("");
   const MODIF_MFA_OK = "MFA modification successful.";
   const MODIF_OTP_OK = "OTP modification successful.";
 
@@ -29,7 +33,6 @@ const Page = () => {
 
       await handleEnableTotp(Eanable);
 
-      console.log(responseData);
       if (responseData.message) {
         setMessage(responseData.message);
 
@@ -47,12 +50,34 @@ const Page = () => {
     }
   };
 
+  const generateOPQrCodeLink = async () => {
+    try {
+      // send api req to receive qrcode
+      const responseData: Result = await GenerateTotpCode({
+        userId: currentUser?.id || "",
+      });
+
+      // Set Qrcode
+      if (responseData) {
+        const result = responseData.result;
+
+        setQrCode(result);
+      }
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, extractHttpErrorMessage);
+      setMessage(errorMessage);
+
+      console.log(error);
+    }
+  };
+
   const handleEnableTotp = async (Eanable: Eanable) => {
     try {
       const responseData: EanableResponse = await EanableTotp(Eanable);
-      console.log(responseData);
       if (responseData.message) {
         setMessage(responseData.message);
+
+        await generateOPQrCodeLink();
 
         setShowOtpBox(true);
       }
@@ -102,7 +127,7 @@ const Page = () => {
               duration: 1.5,
             }} // Smooth slide in and out
           >
-            <OtpBox userId={currentUser?.id || ""} />
+            <OtpBox userId={currentUser?.id || ""} qrCode={qrcode} />
           </motion.div>
         )}
       </AnimatePresence>
