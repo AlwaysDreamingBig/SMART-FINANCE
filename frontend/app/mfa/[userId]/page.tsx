@@ -127,7 +127,11 @@ const Page = () => {
               duration: 1.5,
             }} // Smooth slide in and out
           >
-            <OtpBox userId={currentUser?.id || ""} qrCode={qrcode} />
+            <OtpBox
+              userId={currentUser?.id || ""}
+              qrCode={qrcode}
+              generateOPQrCodeLink={generateOPQrCodeLink}
+            />
           </motion.div>
         )}
       </AnimatePresence>

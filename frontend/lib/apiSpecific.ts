@@ -45,6 +45,11 @@ export interface EanableResponse {
   session: string;
 }
 
+export interface ValidateUserCode {
+  userId: string;
+  token: string;
+}
+
 export const login = (data: LoginData) =>
   makeApiRequest<AuthApiResponse, LoginData>("/auth/login", {
     method: "POST",
@@ -84,4 +89,10 @@ export const EanableTotp = (data: Eanable) =>
 export const GenerateTotpCode = (data: UserId) =>
   makeApiRequest<Result, UserId>(`/totp/generate-qr/${data.userId}`, {
     method: "GET",
+  });
+
+export const ValidateTotpCode = (data: ValidateUserCode) =>
+  makeApiRequest<Message, ValidateUserCode>(`/totp/verify/${data.userId}`, {
+    method: "POST",
+    body: data,
   });
