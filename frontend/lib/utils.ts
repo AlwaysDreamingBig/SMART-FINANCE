@@ -43,3 +43,15 @@ export const extractEmailFromPath = (path: string): string | null => {
 export const customDelay = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+// utils/errorUtils.ts
+export function getErrorMessage(
+  error: unknown,
+  extractMessage: (errorString: string) => string
+): string {
+  if (error instanceof Error) {
+    const extractedMessage = extractMessage(error.message);
+    return extractedMessage || "An unknown error occurred. Please try again.";
+  }
+  return "An unknown error occurred. Please try again.";
+}
