@@ -165,6 +165,15 @@
   .h5 {
     @apply text-[16px] font-semibold leading-[24px];
   }
+  .h6 {
+    @apply text-[14px] font-semibold leading-[24px];
+  }
+  .h7 {
+    @apply text-[12px] font-semibold leading-[24px];
+  }
+  .h8 {
+    @apply text-[10px] font-semibold leading-[24px];
+  }
   .subtitle-1 {
     @apply text-[16px] font-medium leading-[24px];
   }
