@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"; // Import useRouter from next/navig
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { BellIcon } from "@heroicons/react/24/outline";
 import { Headphones, Settings } from "lucide-react";
 
 // Bottom items for the sidebar with dynamic routes
@@ -18,6 +19,11 @@ const bottomItems = [
   },
   {
     icon: Headphones,
+    label: "Support",
+    route: "/user/:sessionId/:userId/Support",
+  },
+  {
+    icon: BellIcon,
     label: "Support",
     route: "/user/:sessionId/:userId/Support",
   },
