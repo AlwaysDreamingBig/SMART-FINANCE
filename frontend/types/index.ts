@@ -36,3 +36,20 @@ export interface CashFlowData {
   income: number;
   expenses: number;
 }
+
+export type FinanceData = {
+  current: {
+    totalBalance: number;
+    totalIncome: number;
+    totalExpenses: number;
+    savingsRate: number;
+    netWorth: number;
+  };
+  previous: {
+    totalBalance: number;
+    totalIncome: number;
+    totalExpenses: number;
+    savingsRate: number;
+    netWorth: number;
+  };
+};
