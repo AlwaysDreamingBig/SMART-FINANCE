@@ -88,3 +88,8 @@ export function calculateCashFlowTrend(
 
   return trend;
 }
+export const calculateTrend = (current: number, previous: number): string => {
+  if (previous === 0) return "0%"; // Avoid division by zero
+  const change = ((current - previous) / previous) * 100;
+  return `${change.toFixed(1)}%`; // Round to 1 decimal place
+};
