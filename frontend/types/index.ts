@@ -25,3 +25,14 @@ export interface NavbarProps {
   sessionId: string;
   userId: string;
 }
+
+export interface NetWorthData {
+  month: string;
+  netWorth: number;
+}
+
+export interface CashFlowData {
+  month: string;
+  income: number;
+  expenses: number;
+}
