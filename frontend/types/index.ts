@@ -13,3 +13,15 @@ export type User = {
   ssn: string;
   connectionStatus: "online" | "away" | "offline" | "out-of-office";
 };
+
+export type NavItem = {
+  label: string;
+  to: string;
+};
+
+export interface NavbarProps {
+  navItems: NavItem[];
+  brandName: string;
+  sessionId: string;
+  userId: string;
+}
