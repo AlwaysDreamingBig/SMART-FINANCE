@@ -104,3 +104,17 @@ export type BudgetCategory = {
   budget: number;
   spent: number;
 };
+
+export interface Payment {
+  id: string;
+  payee: string;
+  amount: number;
+  dueDate: string;
+  status: "paid" | "upcoming" | "overdue";
+  type: "bill" | "subscription" | "transfer";
+  recurrence: "none" | "weekly" | "monthly" | "yearly";
+  attachments: { file: string; name: string }[];
+  reminderDays: number;
+  paymentMethodId?: string;
+  endDate?: string;
+}
