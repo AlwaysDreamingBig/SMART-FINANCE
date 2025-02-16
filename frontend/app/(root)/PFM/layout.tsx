@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex max-h-screen flex-col space-y-10">
+    <div className="flex flex-col space-y-10">
       <div className="sticky top-0 z-50 bg-white">
         <PfmNavigation />
       </div>
