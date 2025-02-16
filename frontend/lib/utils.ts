@@ -1,4 +1,4 @@
-import { CashFlowData } from "@/types";
+import { CalendarDay, CashFlowData, Payment } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
@@ -92,4 +92,29 @@ export const calculateTrend = (current: number, previous: number): string => {
   if (previous === 0) return "0%"; // Avoid division by zero
   const change = ((current - previous) / previous) * 100;
   return `${change.toFixed(1)}%`; // Round to 1 decimal place
+};
+
+export const generateCalendarDays = (
+  year: number,
+  payments: Payment[]
+): CalendarDay[] => {
+  return Array.from({ length: 12 }, (_, month) => {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    return Array.from({ length: daysInMonth }, (_, day) => {
+      const date = new Date(year, month, day + 1);
+
+      return {
+        date,
+        payments: payments.filter((p) => {
+          const paymentDate = new Date(p.dueDate); // Ensure this parses correctly
+          return (
+            paymentDate.getFullYear() === date.getFullYear() &&
+            paymentDate.getMonth() === date.getMonth() &&
+            paymentDate.getDate() === date.getDate()
+          );
+        }),
+      };
+    });
+  }).flat();
 };

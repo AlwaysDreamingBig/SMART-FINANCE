@@ -134,3 +134,10 @@ export interface CalendarDay {
 export interface PaymentCalendarProps {
   days: CalendarDay[];
 }
+
+export interface PaymentMethod {
+  id: string;
+  last4: string;
+  brand: string;
+  exp: string;
+}
