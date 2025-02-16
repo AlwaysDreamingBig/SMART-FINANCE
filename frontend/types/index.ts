@@ -53,3 +53,9 @@ export type FinanceData = {
     netWorth: number;
   };
 };
+
+export interface SmBudget {
+  category: string;
+  spent: number;
+  limit: number;
+}

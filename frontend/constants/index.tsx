@@ -1,4 +1,4 @@
-import { FinanceData } from "@/types";
+import { FinanceData, SmBudget } from "@/types";
 
 export const cashFlowData = [
   { month: "Jan", income: 4000, expenses: 2500 },
@@ -41,3 +41,20 @@ export const financeData: FinanceData = {
     netWorth: 48000,
   },
 };
+
+export const spendingData = [
+  { name: "Housing", value: 1200 },
+  { name: "Transport", value: 400 },
+  { name: "Food", value: 600 },
+  { name: "Utilities", value: 300 },
+  { name: "Entertainment", value: 500 },
+  { name: "Healthcare", value: 300 },
+  { name: "Education", value: 700 },
+  { name: "Insurance", value: 200 },
+  { name: "Savings", value: 1000 },
+];
+
+export const budgets: SmBudget[] = [
+  { category: "Food", spent: 600, limit: 800 },
+  { category: "Entertainment", spent: 150, limit: 300 },
+];
