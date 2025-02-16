@@ -1,4 +1,4 @@
-import { BudgetCategory, FinanceData, SmBudget } from "@/types";
+import { Budget, BudgetCategory, FinanceData, SmBudget } from "@/types";
 
 export const cashFlowData = [
   { month: "Jan", income: 4000, expenses: 2500 },
@@ -65,4 +65,79 @@ export const budgetData: BudgetCategory[] = [
   { name: "Entertainment", budget: 100, spent: 80 },
   { name: "Utilities", budget: 300, spent: 250 },
   { name: "Others", budget: 150, spent: 100 },
+];
+
+export const sampleBudgets: Budget[] = [
+  {
+    id: "1",
+    category: "Groceries",
+    allocated: 500,
+    spent: 320,
+    period: "monthly",
+    icon: "🛒",
+    date: new Date("2025-02-01"),
+  },
+  {
+    id: "2",
+    category: "Rent",
+    allocated: 1500,
+    spent: 1500,
+    period: "monthly",
+    icon: "🏠",
+    date: new Date("2025-02-01"),
+  },
+  {
+    id: "3",
+    category: "Entertainment",
+    allocated: 200,
+    spent: 120,
+    period: "weekly",
+    icon: "🎮",
+    date: new Date("2025-02-03"),
+  },
+  {
+    id: "4",
+    category: "Transportation",
+    allocated: 300,
+    spent: 100,
+    period: "monthly",
+    icon: "🚗",
+    date: new Date("2025-02-01"),
+  },
+  {
+    id: "5",
+    category: "Savings",
+    allocated: 500,
+    spent: 0,
+    period: "monthly",
+    icon: "💰",
+    date: new Date("2025-02-01"),
+  },
+  {
+    id: "6",
+    category: "Health & Wellness",
+    allocated: 100,
+    spent: 75,
+    period: "weekly",
+    icon: "🏋️",
+    date: new Date("2025-02-04"),
+  },
+  {
+    id: "7",
+    category: "Utilities",
+    allocated: 250,
+    spent: 200,
+    period: "monthly",
+    icon: "💡",
+    date: new Date("2025-02-01"),
+  },
+  {
+    id: "8",
+    category: "Vacation",
+    allocated: 2000,
+    spent: 500,
+    period: "yearly",
+    icon: "✈️",
+    date: new Date("2025-01-01"),
+  },
 ];
