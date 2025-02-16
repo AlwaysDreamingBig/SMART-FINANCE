@@ -71,3 +71,17 @@ export interface Budget {
   icon: string;
   date: Date;
 }
+
+export interface HistoryEntry {
+  date: Date;
+  amount: number;
+  type: "allocation" | "spending" | "adjustment" | "deletion";
+  category: string;
+  period: BudgetPeriod;
+  description?: string;
+}
+
+export interface BudgetHistoryProps {
+  period: BudgetPeriod;
+  history: HistoryEntry[];
+}
