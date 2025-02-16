@@ -118,3 +118,19 @@ export interface Payment {
   paymentMethodId?: string;
   endDate?: string;
 }
+
+export interface CalendarPayment {
+  payee: string;
+  amount: number;
+  type: "bill" | "subscription" | "transfer";
+  dueDate: string;
+}
+
+export interface CalendarDay {
+  date: Date;
+  payments: CalendarPayment[];
+}
+
+export interface PaymentCalendarProps {
+  days: CalendarDay[];
+}
