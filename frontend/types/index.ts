@@ -59,3 +59,15 @@ export interface SmBudget {
   spent: number;
   limit: number;
 }
+
+export type BudgetPeriod = "weekly" | "monthly" | "yearly";
+
+export interface Budget {
+  id: string;
+  category: string;
+  allocated: number;
+  spent: number;
+  period: BudgetPeriod;
+  icon: string;
+  date: Date;
+}
