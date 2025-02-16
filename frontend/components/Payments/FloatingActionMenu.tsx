@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { FiBell, FiCreditCard, FiDownload, FiPlus } from "react-icons/fi";
 import { Button } from "../General/Button";
