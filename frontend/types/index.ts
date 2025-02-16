@@ -85,3 +85,16 @@ export interface BudgetHistoryProps {
   period: BudgetPeriod;
   history: HistoryEntry[];
 }
+
+export interface BudgetQuickActionsProps {
+  budgets: {
+    id: string;
+    allocated: number;
+    spent: number;
+    period: "weekly" | "monthly" | "yearly";
+  }[];
+  setBudgets: (budgets: any) => void;
+  totalAllocated: number;
+  totalSpent: number;
+  selectedPeriod: "weekly" | "monthly" | "yearly";
+}
