@@ -1,7 +1,10 @@
+"use client";
+
 import { Budget } from "@/types";
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Dialog } from "@headlessui/react";
+import EmojiPicker from "emoji-picker-react";
 import { motion } from "framer-motion";
 
 // Budget Category Card
@@ -122,7 +125,8 @@ export const BudgetModal = ({
     date: new Date(),
   });
 
-  // Update formData when editingBudget changes
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+
   useEffect(() => {
     if (editingBudget) {
       setFormData({
@@ -151,6 +155,11 @@ export const BudgetModal = ({
       ? { ...formData, id: editingBudget.id }
       : { ...formData, id: Math.random().toString() };
     onSubmit(budgetData);
+  };
+
+  const handleEmojiClick = (emojiData: { emoji: string }) => {
+    setFormData((prev) => ({ ...prev, icon: emojiData.emoji }));
+    setEmojiPickerVisible(false);
   };
 
   return (
@@ -215,14 +224,26 @@ export const BudgetModal = ({
 
           <div>
             <label>Icon</label>
-            <input
-              type="text"
-              className="w-full rounded border p-2"
-              value={formData.icon}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, icon: e.target.value }))
-              }
-            />
+            <button
+              type="button"
+              className="flex w-full items-center justify-between rounded border border-r-gray-500 p-2"
+              onClick={() => setEmojiPickerVisible((prev) => !prev)}
+            >
+              {formData.icon}
+              <span>😊</span>
+            </button>
+
+            {emojiPickerVisible && (
+              <div
+                className="absolute z-10 mt-2"
+                style={{
+                  top: "-130px", // This will move the picker up
+                  right: "0", // This will place it on the right side
+                }}
+              >
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+              </div>
+            )}
           </div>
         </div>
 
