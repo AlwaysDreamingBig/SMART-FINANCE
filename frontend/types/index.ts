@@ -98,3 +98,9 @@ export interface BudgetQuickActionsProps {
   totalSpent: number;
   selectedPeriod: "weekly" | "monthly" | "yearly";
 }
+
+export type BudgetCategory = {
+  name: string;
+  budget: number;
+  spent: number;
+};
