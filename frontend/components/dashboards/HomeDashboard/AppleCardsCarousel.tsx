@@ -186,31 +186,31 @@ const myDdata = [
   {
     category: "Personal Finance Management",
     title: "Master your finances with PFM tools.",
-    src: "https://images.unsplash.com/photo-1602081957921-9137a5d6eaee?q=80&w=2793&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Replace with a relevant image
+    src: "/assets/images/masterfinance.jpg",
     content: <ContentPfm />,
   },
   {
     category: "Loan and Mortgage Management",
     title: "Simplify loan applications and management.",
-    src: "https://images.unsplash.com/photo-1599202860130-f600f4948364?q=80&w=2515&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Replace with a relevant image
+    src: "/assets/images/loan.png",
     content: <ContentLmm />,
   },
   {
     category: "AI Fraud Detection",
     title: "Stay safe with AI-powered fraud detection.",
-    src: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=3556&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Replace with a relevant image
+    src: "/assets/images/aifd.jpg",
     content: <ContentAifd />,
   },
   {
     category: "Promotions",
     title: "Check out our latest promotions and offers.",
-    src: "https://images.unsplash.com/photo-1605208138507-578b6cb0e1d1?q=80&w=3556&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Replace with a relevant image
+    src: "/assets/images/promotions.jpg",
     content: <ContentPromotions />,
   },
   {
     category: "New Features",
     title: "Discover new features to improve your experience.",
-    src: "https://images.unsplash.com/photo-1713869791518-a770879e60dc?q=80&w=2333&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Replace with a relevant image
+    src: "/assets/images/features.jpg",
     content: <ContentNewFeatures />,
   },
 ];
