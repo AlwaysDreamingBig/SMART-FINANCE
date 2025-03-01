@@ -151,3 +151,14 @@ export interface ChartData {
     borderColor?: string;
   }[];
 }
+
+export interface Notifications {
+  id: string;
+  type: "alert" | "info" | "success" | "transaction";
+  category: "budget" | "investment" | "bill" | "security" | "transaction";
+  message: string;
+  date: Date;
+  read: boolean;
+  link: string;
+  priority: "high" | "medium" | "low";
+}
