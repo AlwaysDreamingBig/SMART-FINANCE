@@ -141,3 +141,56 @@ export const sampleBudgets: Budget[] = [
     date: new Date("2025-01-01"),
   },
 ];
+
+export const reportData = {
+  expenseSummary: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Essential",
+        data: [1200, 1300, 1400, 1500, 1600, 1700],
+        backgroundColor: "#3B82F6",
+      },
+      {
+        label: "Non-Essential",
+        data: [800, 900, 1000, 1100, 1200, 1300],
+        backgroundColor: "#10B981",
+      },
+    ],
+  },
+  incomeVsExpenses: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Income",
+        data: [3000, 4000, 3500, 4200, 3800, 4500],
+        borderColor: "#10B981",
+      },
+      {
+        label: "Expenses",
+        data: [2000, 2500, 3000, 2800, 3200, 3000],
+        borderColor: "#EF4444",
+      },
+    ],
+  },
+  financialHealth: {
+    netWorth: 45000,
+    debtToIncomeRatio: 0.25,
+    savingsRate: 0.15,
+    creditScore: 720,
+  },
+  spendingByCategory: {
+    labels: ["Housing", "Food", "Transport", "Entertainment", "Health"],
+    datasets: [
+      {
+        label: "Expenses",
+        data: [1200, 500, 300, 400, 200],
+        backgroundColor: "#F59E0B",
+      },
+    ],
+  },
+  custom: {
+    labels: [],
+    datasets: [],
+  },
+};

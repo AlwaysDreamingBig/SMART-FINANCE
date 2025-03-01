@@ -141,3 +141,13 @@ export interface PaymentMethod {
   brand: string;
   exp: string;
 }
+
+export interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor?: string;
+    borderColor?: string;
+  }[];
+}
