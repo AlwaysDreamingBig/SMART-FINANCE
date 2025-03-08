@@ -162,3 +162,32 @@ export interface Notifications {
   link: string;
   priority: "high" | "medium" | "low";
 }
+
+export interface Transaction {
+  id: string;
+  date: Date;
+  description: string;
+  category: string;
+  amount: number;
+  type: "income" | "expense";
+  status: "completed" | "pending" | "failed";
+  tags: string[];
+  recurring?: {
+    frequency:
+      | "daily"
+      | "weekly"
+      | "monthly"
+      | "quarterly"
+      | "yearly"
+      | "one-time";
+
+    endDate?: Date;
+  };
+
+  notes?: string;
+}
+
+export interface BaseChartData {
+  month: string;
+  Trend: number;
+}
