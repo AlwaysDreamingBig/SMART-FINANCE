@@ -1,5 +1,3 @@
-// components/Header.tsx
-
 import { Button } from "@/components/ui/button";
 import { Currency, Download, Plus } from "lucide-react";
 import { CurrencySelector } from "./CurrencySelector";
@@ -18,7 +16,7 @@ export function Header({
   setIsAddModalOpen,
 }: HeaderProps) {
   return (
-    <div className="flex flex-col justify-between gap-4 lg:flex-row">
+    <div className="flex flex-col justify-between gap-4 md:flex-row">
       <div className="space-y-1">
         <h1 className="flex items-center gap-2 text-3xl font-bold">
           <Currency className="text-primary" /> Transactions
@@ -40,15 +38,21 @@ export function Header({
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex w-full gap-2 md:w-auto">
         <CurrencySelector value={currency} onChange={setCurrency} />
         <Button variant="outline">
           <Download className="mr-2 size-4" />
           Export
         </Button>
-        <Button onClick={() => setIsAddModalOpen(true)}>
-          <Plus className="mr-2 size-4" />
-          Add Transaction
+        <Button
+          onClick={() => setIsAddModalOpen(true)}
+          className="group relative w-full md:w-auto"
+        >
+          <Plus className="size-4" />
+          <span className="hidden group-hover:inline md:inline">
+            {" "}
+            Transaction
+          </span>
         </Button>
       </div>
     </div>
