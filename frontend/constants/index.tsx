@@ -1,9 +1,11 @@
 import {
+  BaseChartData,
   Budget,
   BudgetCategory,
   FinanceData,
   Notifications,
   SmBudget,
+  Transaction,
 } from "@/types";
 
 export const cashFlowData = [
@@ -304,3 +306,127 @@ export const sampleNotifications: Notifications[] = [
     priority: "medium",
   },
 ];
+
+export const DEFAULT_TRANSACTION: Transaction = {
+  id: "", // Default empty string for id
+  date: new Date(), // Default to the current date
+  description: "", // Default empty string for description
+  category: "", // Default empty string for category
+  amount: 0, // Default amount of 0
+  type: "income", // Default type set to 'income'
+  status: "completed", // Default status set to 'completed'
+  tags: [], // Default empty array for tags
+  recurring: {
+    // Default to an object with 'daily' frequency, you can adjust if needed
+    frequency: "daily",
+    endDate: undefined, // No end date by default
+  },
+  notes: "", // Default empty string for notes
+};
+
+const sampleTransactions: Transaction[] = [
+  {
+    id: "1",
+    date: new Date("2024-02-15"),
+    description: "Groceries",
+    category: "Food",
+    amount: 120.5,
+    type: "expense",
+    status: "completed",
+    tags: ["groceries", "supermarket"],
+    recurring: { frequency: "weekly" },
+    notes: "Bought vegetables and fruits",
+  },
+  {
+    id: "2",
+    date: new Date("2024-02-20"),
+    description: "Gym Membership",
+    category: "Health",
+    amount: 50,
+    type: "expense",
+    status: "completed",
+    tags: ["fitness", "monthly"],
+    recurring: { frequency: "monthly" },
+    notes: "Gym subscription renewal",
+  },
+  {
+    id: "3",
+    date: new Date("2024-02-22"),
+    description: "Netflix Subscription",
+    category: "Entertainment",
+    amount: 15.99,
+    type: "expense",
+    status: "completed",
+    tags: ["subscription", "movies"],
+    recurring: { frequency: "monthly" },
+    notes: "Streaming service",
+  },
+  {
+    id: "4",
+    date: new Date("2024-02-25"),
+    description: "Salary",
+    category: "Income",
+    amount: 3000,
+    type: "income",
+    status: "completed",
+    tags: ["salary", "monthly"],
+  },
+  {
+    id: "5",
+    date: new Date("2024-02-28"),
+    description: "Dinner with friends",
+    category: "Food",
+    amount: 80,
+    type: "expense",
+    status: "completed",
+    tags: ["restaurant", "friends"],
+    notes: "Went out for dinner",
+  },
+  {
+    id: "6",
+    date: new Date("2024-02-25"),
+    description: "Salary",
+    category: "Other",
+    amount: 300,
+    type: "income",
+    status: "completed",
+    tags: ["salary", "monthly"],
+  },
+  {
+    id: "7",
+    date: new Date("2024-02-25"),
+    description: "Salary",
+    category: "Debt",
+    amount: 1000,
+    type: "income",
+    status: "completed",
+    tags: ["salary", "monthly"],
+  },
+  {
+    id: "8",
+    date: new Date("2024-02-25"),
+    description: "Salary",
+    category: "Debt",
+    amount: 500,
+    type: "income",
+    status: "completed",
+    tags: ["salary", "monthly"],
+  },
+];
+
+export default sampleTransactions;
+
+export const sampleTrendData: BaseChartData[] = [
+  { month: "January", Trend: 2 },
+  { month: "February", Trend: 4.5 },
+  { month: "March", Trend: 1 },
+  { month: "April", Trend: 7.3 },
+  { month: "May", Trend: -2 },
+  { month: "June", Trend: 0.6 },
+];
+
+export const statusVariants = {
+  completed: "bg-green-100 text-green-800",
+  pending: "bg-yellow-100 text-yellow-800",
+  failed: "bg-red-100 text-red-800",
+};
