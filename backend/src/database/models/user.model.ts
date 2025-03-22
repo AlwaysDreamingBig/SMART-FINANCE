@@ -12,7 +12,7 @@ interface UserPreferences {
 interface TOTPPreferences {
   enable: boolean;
   totpSecret: string;
-  isTotpVerified: boolean
+  isTotpVerified: boolean;
 }
 
 export interface BaseUserDocument extends Document {
@@ -20,7 +20,16 @@ export interface BaseUserDocument extends Document {
   email: string;
   password: string;
   avatar?: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  dateOfBirth: string;
+  ssn: string;
   isEmailVerified: boolean;
+  dwollaCustomerId: string;
   createdAt: Date;
   updatedAt: Date;
   userPreferences: UserPreferences;
@@ -57,6 +66,42 @@ const baseUserSchema = new Schema<BaseUserDocument>(
       required: true,
     },
     avatar: {
+      type: String,
+      default: null,
+    },
+    firstName: {
+      type: String,
+      default: null,
+    },
+    lastName: {
+      type: String,
+      default: null,
+    },
+    address: {
+      type: String,
+      default: null,
+    },
+    state: {
+      type: String,
+      default: null,
+    },
+    city: {
+      type: String,
+      default: null,
+    },
+    postalCode: {
+      type: String,
+      default: null,
+    },
+    dateOfBirth: {
+      type: String,
+      default: null,
+    },
+    ssn: {
+      type: String,
+      default: null,
+    },
+    dwollaCustomerId: {
       type: String,
       default: null,
     },
@@ -97,4 +142,8 @@ baseUserSchema.set("toJSON", {
   },
 });
 
-export const BaseUserModel = mongoose.model<BaseUserDocument>("BaseUser", baseUserSchema, "Users");
+export const BaseUserModel = mongoose.model<BaseUserDocument>(
+  "BaseUser",
+  baseUserSchema,
+  "Users"
+);
