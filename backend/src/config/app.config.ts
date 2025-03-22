@@ -36,6 +36,11 @@ interface AppConfig {
   PLAID_ENV: string;
   PLAID_PRODUCTS: string;
   PLAID_COUNTRY_CODE: string;
+
+  DWOLLA_KEY: string;
+  DWOLLA_SECRET: string;
+  DWOLLA_BASE_URL: string;
+  DWOLLA_ENV: string;
 }
 
 const appConfig = (): AppConfig => ({
@@ -77,6 +82,11 @@ const appConfig = (): AppConfig => ({
   PLAID_ENV: getEnv("PLAID_ENV"),
   PLAID_PRODUCTS: getEnv("PLAID_PRODUCTS"),
   PLAID_COUNTRY_CODE: getEnv("PLAID_COUNTRY_CODE"),
+
+  DWOLLA_KEY: getEnv("DWOLLA_KEY"),
+  DWOLLA_SECRET: getEnv("DWOLLA_SECRET"),
+  DWOLLA_BASE_URL: getEnv("DWOLLA_BASE_URL"),
+  DWOLLA_ENV: getEnv("DWOLLA_ENV"),
 });
 
 export const config = appConfig();

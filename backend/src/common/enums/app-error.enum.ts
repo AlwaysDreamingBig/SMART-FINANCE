@@ -44,6 +44,31 @@ const enum AppErrorMessage {
 
   // Plaid
   FUNDING_ERROR = "Funding source Url does not exist",
+
+  // Dwolla
+  GET_ENV_ERROR = "Dwolla environment should either be set to `sandbox` or `production`",
+  CREATE_FUND_ERR = "Creating a Funding Source Failed",
+  CREATE_ON_DEMAND_AUTH_ERR = "Creating an On Demand Authorization Failed",
+  CREATE_CUSTOMER_ERR = "Creating customer operation Failed",
+  CREATE_TRANSFER_ERR = "Create transfer operation Failed",
+  ADD_FUNDING_SOURCE_ERR = "Failed to add funding source. Please check the provided details and try again.",
+  GET_CUSTOMER_ERR = "Failed to retrieve customer details. Ensure the customer ID is correct.",
+  UPDATE_CUSTOMER_ERR = "Failed to update customer information. Please verify the provided data.",
+  SUSPEND_CUSTOMER_ERR = "Failed to suspend customer account. The account may not be eligible for suspension.",
+  GET_FUNDING_SOURCE_ERR = "Failed to retrieve funding source details. Verify the funding source ID.",
+  REMOVE_FUNDING_SOURCE_ERR = "Failed to remove funding source. Ensure it is not currently in use.",
+  INIT_MICRODEPOSITS_ERR = "Failed to initiate micro-deposits for verification. Please try again later.",
+  GET_TRANSFER_ERR = "Failed to retrieve transfer details. Ensure the transfer ID is valid.",
+  LIST_TRANSFERS_ERR = "Failed to fetch transfer history. Try again later.",
+  CANCEL_TRANSFER_ERR = "Failed to cancel transfer. It may have already been processed.",
+  CREATE_WEBHOOK_ERR = "Failed to create webhook. Ensure the provided URL is valid.",
+  LIST_WEBHOOKS_ERR = "Failed to retrieve webhook list. Please try again later.",
+  CREATE_REFUND_ERR = "Failed to process refund. Ensure the transaction is eligible for a refund.",
+  GET_BALANCE_ERR = "Failed to retrieve account balance. Try again later.",
+  VERIFY_CUSTOMER_ERR = "Failed to verify customer identity. Ensure the provided information is accurate.",
+  VERIFY_MICRODEPOSITS_ERR = "Failed to verify micro-deposits. Please ensure the amounts entered are correct and try again.",
+  PROCESS_WEBHOOK_ERR = "Failed to process webhook. Ensure the payload is valid and the event type is supported.",
+  VERIFY_SIGNATURE_ERR = "Signature verification failed",
 }
 
 export { AppErrorMessage };
