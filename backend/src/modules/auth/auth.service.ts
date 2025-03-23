@@ -23,6 +23,9 @@ import { VerificationCodeService } from "../../common/utils/create-verification-
 import { config } from "../../config/app.config";
 import { hashValue } from "../../common/utils/bcrypt";
 import { sessionService } from "../session/session.service";
+import { NewDwollaCustomerParams } from "../../types";
+import { dwollaService } from "../dwolla/dwolla.service";
+import { extractCustomerIdFromUrl } from "../../common/utils/utils";
 
 export class AuthService {
 
@@ -35,79 +38,102 @@ export class AuthService {
    * @returns User details, access token, and refresh token
    * @throws HTTPError if login fails
    */
-  static async register(userData: any) {
+   static async register(userData: any) {
     // Validate userData using Zod
     const validData = validateSchema(registerSchema, userData);
+    console.log("Validated User Data:", validData); // Debugging log
 
-    const { email, password, name, role } = validData;
+    const { email, password, name, role, type, firstName, lastName, address, city, state, postalCode, dateOfBirth, ssn } = validData;
+
+    // Check if required fields exist
+    if (!firstName || !lastName) {
+        throwHttpError("First name and last name are required.", HTTPSTATUS.BAD_REQUEST);
+    }
+
+    if (!/^[A-Z]{2}$/.test(state.toUpperCase())) {
+        throwHttpError("State must be a valid 2-letter abbreviation.", HTTPSTATUS.BAD_REQUEST);
+    }
 
     // Check if the user already exists
     const existingUser = await BaseUserModel.findOne({ email });
     if (existingUser) {
-      // Throw a custom error if the user already exists
-      throwHttpError(AppErrorMessage.AUTH_EMAIL_ALREADY_EXISTS, HTTPSTATUS.CONFLICT);
+        throwHttpError(AppErrorMessage.AUTH_EMAIL_ALREADY_EXISTS, HTTPSTATUS.CONFLICT);
     }
 
     let newUser;
+    
+    const userDataSet = {
+        email,
+        password,
+        name,
+        firstName,
+        lastName,
+        address,
+        city,
+        state: state.toUpperCase(), // Convert state to uppercase
+        postalCode,
+        dateOfBirth,
+        ssn,
+        isEmailVerified: false,
+    };
 
-    // Handle different user roles and set the correct model
-    if (role === "admin") {
-      // Create a new admin user using AdminModel
-      newUser = new AdminModel({
-        email,
-        password,
-        name,
-        isEmailVerified: false, // Email verification is pending
-      });
-    } else if (role === "manager") {
-        // Create a new admin user using AdminModel
-        newUser = new ManagerModel({
-          email,
-          password,
-          name,
-          isEmailVerified: false, // Email verification is pending
-        });
-    } else if (role === "developer") {
-        // Create a new admin user using AdminModel
-        newUser = new DeveloperModel({
-          email,
-          password,
-          name,
-          isEmailVerified: false, // Email verification is pending
-        });
-    } else if (role === "client") {
-        // Create a new admin user using AdminModel
-        newUser = new ClientModel({
-          email,
-          password,
-          name,
-          isEmailVerified: false, // Email verification is pending
-        });
-    } else {
-      // Create a new regular user using BaseUserModel
-      newUser = new BaseUserModel({
-        email,
-        password,
-        name,
-        isEmailVerified: false, // Email verification is pending
-      });
+    // Assign user data to the correct model
+    switch (role) {
+        case "admin":
+            newUser = new AdminModel(userDataSet);
+            break;
+        case "manager":
+            newUser = new ManagerModel(userDataSet);
+            break;
+        case "developer":
+            newUser = new DeveloperModel(userDataSet);
+            break;
+        case "client":
+            newUser = new ClientModel(userDataSet);
+            break;
+        default:
+            newUser = new BaseUserModel(userDataSet);
     }
 
-    // Save the user to the appropriate collection
+    console.log("New User Object Before Saving:", newUser); // Debugging log
+
+    // Ensure all required fields are set for Dwolla
+    const createDwollaCustomerParams: NewDwollaCustomerParams = {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        type,
+        address1: newUser.address,
+        city: newUser.city,
+        state: newUser.state, // Already converted to uppercase
+        postalCode: newUser.postalCode,
+        dateOfBirth: newUser.dateOfBirth,
+        ssn: newUser.ssn,
+    };
+
+    console.log("Dwolla Payload:", createDwollaCustomerParams); // Debugging log
+
+    const dwollaCustomerUrl = await dwollaService.createDwollaCustomer(createDwollaCustomerParams);
+
+    if (!dwollaCustomerUrl) {
+        throwHttpError("Error creating Dwolla Customer URL", HTTPSTATUS.INTERNAL_SERVER_ERROR);
+    }
+
+    newUser.dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl!);
     await newUser.save();
 
-    const Verification = await VerificationCodeService.createVerificationCode(newUser._id, VerificationEnum.EMAIL_VERIFICATION)
+    const Verification = await VerificationCodeService.createVerificationCode(newUser._id, VerificationEnum.EMAIL_VERIFICATION);
 
-    // Send verification email
     try {
-      await mailService.sendVerificationEmail(email, Verification.code);
-      console.log(`Verification email sent to ${email}`);
+        await mailService.sendVerificationEmail(email, Verification.code);
+        console.log(`Verification email sent to ${email}`);
     } catch (error) {
-      throwHttpError('Error sending verification email', HTTPSTATUS.INTERNAL_SERVER_ERROR);
+        throwHttpError("Error sending verification email", HTTPSTATUS.INTERNAL_SERVER_ERROR);
     }
 
     return newUser;
-  };
+  }
+
 
 
  /**
