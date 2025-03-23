@@ -62,6 +62,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       password: "",
       confirmPassword: "",
       role: "client",
+      type: "personal",
     },
   });
 
@@ -85,6 +86,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
           email: formData.email,
           password: formData.password,
           confirmPassword: formData.confirmPassword,
+          type: formData.type,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address1,
+          city: formData.city,
+          state: formData.state,
+          dateOfBirth: formData.dateOfBirth,
+          ssn: formData.ssn,
+          postalCode: formData.postalCode,
         });
       }
 
@@ -126,7 +136,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       } else {
         await customDelay(1000);
 
-        router.replace(`/mfa/verif-email/${formData.email}`);
+        router.replace("/link-account");
       }
     } catch (err) {
       const errorString = err instanceof Error ? err.message : String(err);
