@@ -65,3 +65,35 @@
     - Setup the src/index.ts file :
         - Create the getEnv function
         - Create the app.config.ts 
+
+
+Explanation of the Schema:
+    U.S. SSN (XXX-XX-XXXX):
+
+    Regex: ^(?!000|666|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$
+
+    Validates the U.S. SSN format with dashes. It checks for 9 digits and ensures that invalid numbers like 000, 666, or starting with 9 are excluded.
+
+    European SSN (National ID formats):
+
+    Regex for European formats:
+
+    \d{9}: 9 digits for some countries (e.g., Belgium, Netherlands).
+
+    \d{13}: 13 digits for some countries (e.g., France, Germany).
+
+    \d{15}: 15 digits (some national ID formats).
+
+    [A-Z0-9]{16}: 16 alphanumeric characters for Italy's Codice Fiscale.
+
+    [A-Z]{2}\d{2} \d{2} \d{2} \d{2}: 10-character format for UK National Insurance Number (QQ 12 34 56 C).
+
+    \d{2}\/\d{10}: 12-character format for Spain's SSN with a slash (12/1234567890).
+
+    Transforming Input:
+
+    The transform method is used to strip out any non-numeric or non-alphabetic characters for comparison, ensuring that we only deal with digits or alphanumeric characters.
+
+    Length Check:
+
+    The second refine checks the length of the cleaned SSN, ensuring it matches the expected length of 9, 13, 15, or 16 characters for the given formats.

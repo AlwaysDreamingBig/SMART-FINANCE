@@ -43,7 +43,7 @@ export const registerSchema = z
       .string()
       .min(1, "City is required")
       .max(100, "City cannot exceed 100 characters"),
-    state: z.string().length(2, "State must be a 2-letter abbreviation"),
+    state: z.string().min(2, "State must be a 2-letter abbreviation"),
     postalCode: z
       .string()
       .min(5, "Postal code must be at least 5 characters")
@@ -58,18 +58,29 @@ export const registerSchema = z
       .string()
       .refine((val) => {
         // Remove non-numeric characters for SSN formats
-        const cleanedVal = val.replace(/[^0-9]/g, "");
+        const cleanedVal = val.replace(/[^0-9A-Za-z]/g, "");
 
-        // Check if the cleaned SSN matches one of the allowed formats:
-        // - 9 digits for U.S. style (AAA-GG-SSSS)
-        // - 13 or 15 digits for NIR (Numéro de Registre National)
-        return /^(?:\d{9}|\d{13}|\d{15})$/.test(cleanedVal);
-      }, "SSN must be a 9, 13, or 15 digit number with or without dashes or spaces.")
-      .transform((val) => val.replace(/[^0-9]/g, "")) // Remove all non-numeric characters
+        // US SSN: 9 digits, e.g., 123-45-6789
+        const isUS_SSN =
+          /^(?!000|666|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$/.test(val);
+
+        // European formats: Check if it's valid for any of these countries
+        const isEuropean_SSN =
+          /^(?:\d{9}|\d{13}|\d{15}|[A-Z0-9]{16}|[A-Z]{2}\d{2} \d{2} \d{2} \d{2}|\d{2}\/\d{10})$/.test(
+            cleanedVal
+          );
+
+        return isUS_SSN || isEuropean_SSN;
+      }, "SSN must be a valid U.S. SSN (9 digits) or a valid European National ID format.")
+      .transform((val) => val.replace(/[^0-9A-Za-z]/g, "")) // Remove non-numeric/letter characters
       .refine(
-        (val) => val.length === 9 || val.length === 13 || val.length === 15,
+        (val) =>
+          val.length === 9 ||
+          val.length === 13 ||
+          val.length === 15 ||
+          val.length === 16,
         {
-          message: "SSN must be exactly 9, 13, or 15 digits long",
+          message: "SSN must be exactly 9, 13, 15, or 16 characters long",
         }
       ),
   })
