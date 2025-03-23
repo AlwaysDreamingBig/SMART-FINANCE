@@ -19,6 +19,7 @@ import { sessionRoute } from "./modules/session/session.routes";
 import totpRouter from "./modules/mfa/totp/totp.routes";
 import { userRoute } from "./modules/user/user.routes";
 import { plaidRoute } from "./modules/plaid/plaid.routes";
+import { dwollaRoute } from "./modules/dwolla/dwolla.route";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -89,6 +90,7 @@ app.use(`${BASE_PATH}/session`, sessionRoute); // session routes
 app.use(`${BASE_PATH}/totp`, totpRouter); // totp routes
 app.use(`${BASE_PATH}/user`, userRoute); // user routes
 app.use(`${BASE_PATH}/plaid`, plaidRoute); // plaid routes
+app.use(`${BASE_PATH}/dwolla`, dwollaRoute); // dwolla routes
 
 // Start the server
 app.listen(PORT, async () => {
