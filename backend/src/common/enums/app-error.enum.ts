@@ -44,6 +44,7 @@ const enum AppErrorMessage {
 
   // Plaid
   FUNDING_ERROR = "Funding source Url does not exist",
+  CREATE_BANK_ERROR = "Cannot create new bank account.",
 
   // Dwolla
   GET_ENV_ERROR = "Dwolla environment should either be set to `sandbox` or `production`",
