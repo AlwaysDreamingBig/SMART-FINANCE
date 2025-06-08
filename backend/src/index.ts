@@ -20,6 +20,8 @@ import totpRouter from "./modules/mfa/totp/totp.routes";
 import { userRoute } from "./modules/user/user.routes";
 import { plaidRoute } from "./modules/plaid/plaid.routes";
 import { dwollaRoute } from "./modules/dwolla/dwolla.route";
+import session from "express-session";
+import connectivityRouter from "./modules/truelayer/routes/connectivity.routes";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -44,6 +46,21 @@ app.use(passport.initialize());
 
 // Setup the JWT strategy (passport JWT)
 setupJwtStrategy(passport);
+
+// Session cookie setup
+app.use(
+  session({
+    name: "session",
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true, // prevents JS access to cookie
+      secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
 
 // Example route for testing
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
@@ -91,6 +108,7 @@ app.use(`${BASE_PATH}/totp`, totpRouter); // totp routes
 app.use(`${BASE_PATH}/user`, userRoute); // user routes
 app.use(`${BASE_PATH}/plaid`, plaidRoute); // plaid routes
 app.use(`${BASE_PATH}/dwolla`, dwollaRoute); // dwolla routes
+app.use(`${BASE_PATH}/truelayer`, connectivityRouter);
 
 // Start the server
 app.listen(PORT, async () => {

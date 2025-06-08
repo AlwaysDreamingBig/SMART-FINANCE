@@ -141,3 +141,24 @@ export interface Amount {
   value: string;
   currency: "USD";
 }
+
+export interface AuthFlowResponse {
+  success: boolean;
+  authUrl: string;
+}
+
+export interface TokenRefreshResponse {
+  success: boolean;
+  accessToken: string;
+  expiresIn: number;
+}
+
+export interface ReauthResponse {
+  success: boolean;
+  reauthUrl: string;
+}
+
+export interface DisconnectResponse {
+  success: boolean;
+  message: string;
+}

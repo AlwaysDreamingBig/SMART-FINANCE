@@ -34,6 +34,11 @@ export interface BaseUserDocument extends Document {
   updatedAt: Date;
   userPreferences: UserPreferences;
   comparePassword(value: string): Promise<boolean>;
+  truelayerAccessToken: string;
+  truelayerRefreshToken: string;
+  truelayerClientSessionId: string;
+  truelayerTokenExpiry: Date | null;
+  truelayerConnected: boolean;
 }
 
 const TOTPPreferencesSchema = new Schema<TOTPPreferences>({
@@ -112,6 +117,26 @@ const baseUserSchema = new Schema<BaseUserDocument>(
     userPreferences: {
       type: userPreferencesSchema,
       default: {},
+    },
+    truelayerAccessToken: {
+      type: String,
+      default: null,
+    },
+    truelayerRefreshToken: {
+      type: String,
+      default: null,
+    },
+    truelayerClientSessionId: {
+      type: String,
+      default: null,
+    },
+    truelayerTokenExpiry: {
+      type: Date,
+      default: null,
+    },
+    truelayerConnected: {
+      type: Boolean,
+      default: false,
     },
   },
   {

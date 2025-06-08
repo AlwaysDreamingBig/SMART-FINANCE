@@ -70,6 +70,19 @@ const enum AppErrorMessage {
   VERIFY_MICRODEPOSITS_ERR = "Failed to verify micro-deposits. Please ensure the amounts entered are correct and try again.",
   PROCESS_WEBHOOK_ERR = "Failed to process webhook. Ensure the payload is valid and the event type is supported.",
   VERIFY_SIGNATURE_ERR = "Signature verification failed",
+
+  // Truelayer
+  TRUELAYER_INIT_AUTH_ERR = "Failed to initiate auth flow",
+  TRUELAYER_CALLBACK_ERR = "TrueLayer callback error",
+  TRUELAYER_INVALID_CODE = "Invalid authorization code",
+  TRUELAYER_FAIL_CALLBACK = "Failed to handle callback",
+  TRUELAYER_FAIL_REFRESH = "Failed to refresh token",
+  TRUELAYER_FAIL_REAUTH = "Failed to start reauthentication",
+  TRUELAYER_NO_ACC_ID = "Account ID is required",
+  TRUELAYER_FAIL_DISC = "Failed to disconnect account",
+  TRUELAYER_FAIL_STATUS = "Failed to check token status",
+
+  UNAUTHORIZED = "Unauthorized",
 }
 
 export { AppErrorMessage };
